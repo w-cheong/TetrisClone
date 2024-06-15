@@ -15,7 +15,7 @@ function drawPlayfield(){
     canvas.width*.4,
     canvas.height
   )
-  ctx.fillStyle = "#0095DD";
+  ctx.fillStyle = "#000000";
   ctx.fill();
   ctx.closePath();
 }
