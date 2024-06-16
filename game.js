@@ -18,11 +18,12 @@ let gridHeight = 20;
 
 let gridPieceWidth = playfieldWidth/gridWidth;
 let gridPieceHeight = playfieldHeight/gridHeight;
+
+
+
 function drawPlayfield(){
-  
 
   ctx.beginPath();
-
 
   // overall playfield
   ctx.rect(
@@ -34,9 +35,7 @@ function drawPlayfield(){
   ctx.fillStyle = "#000000";
   ctx.fill();
 
-
   // draw grid within playfield
-
   for (let c = 0; c < gridWidth; c++) {
     for (let r = 0; r < gridHeight; r++) {
       ctx.strokeStyle = "gray";
@@ -46,7 +45,6 @@ function drawPlayfield(){
         gridPieceWidth, gridPieceHeight);
     }
   }
-
 
   drawGridPiece(7,5,"blue");
 
@@ -64,33 +62,15 @@ function drawGridPiece(r,c,color)
     gridPieceWidth,
     gridPieceHeight);
 }
-// function drawBall() {
-//   ctx.beginPath();
-//   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-//   ctx.fillStyle = "#0095DD";
-//   ctx.fill();
-//   ctx.closePath();
-// }
-
-// function drawPaddle() {
-//   ctx.beginPath();
-//   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-//   ctx.fillStyle = "#0095DD";
-//   ctx.fill();
-//   ctx.closePath();
-// }
-
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPlayfield();
-
 }
 
 function startGame() {
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
-
 
   function keyDownHandler(e) {
     if (e.key === "Right" || e.key === "ArrowRight") {
