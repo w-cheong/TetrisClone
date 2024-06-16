@@ -8,15 +8,46 @@ let rightPressed = false;
 let leftPressed = false;
 
 function drawPlayfield(){
+  // 10 by 20
+  let playfieldWidth = canvas.width*.4;
+  let playfieldHeight = canvas.height;
+
+  let playfieldStartX = canvas.width*.3;
+  let playfieldStartY = 0;
+
+  let gridWidth = 10;
+  let gridHeight = 20;
+
+  let gridPieceWidth = playfieldWidth/gridWidth;
+  let gridPieceHeight = playfieldHeight/gridHeight;
+
   ctx.beginPath();
+
+
+  // overall playfield
   ctx.rect(
-    canvas.width*.3,
-    0,
-    canvas.width*.4,
-    canvas.height
+    playfieldStartX,
+    playfieldStartY,
+    playfieldWidth,
+    playfieldHeight
   )
   ctx.fillStyle = "#000000";
   ctx.fill();
+
+
+  // draw grid within playfield
+
+  for (let c = 0; c < gridWidth; c++) {
+    for (let r = 0; r < gridHeight; r++) {
+      ctx.strokeStyle = "gray";
+      ctx.strokeRect(
+        playfieldStartX + c*gridPieceWidth,
+        playfieldStartY + r*gridPieceHeight,
+        gridPieceWidth, gridPieceHeight);
+    }
+  }
+
+
   ctx.closePath();
 }
 
