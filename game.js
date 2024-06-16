@@ -6,20 +6,20 @@ let y = canvas.height - 30;
 
 let rightPressed = false;
 let leftPressed = false;
+// 10 by 20
+let playfieldWidth = canvas.width*.4;
+let playfieldHeight = canvas.height;
 
+let playfieldStartX = canvas.width*.3;
+let playfieldStartY = 0;
+
+let gridWidth = 10;
+let gridHeight = 20;
+
+let gridPieceWidth = playfieldWidth/gridWidth;
+let gridPieceHeight = playfieldHeight/gridHeight;
 function drawPlayfield(){
-  // 10 by 20
-  let playfieldWidth = canvas.width*.4;
-  let playfieldHeight = canvas.height;
-
-  let playfieldStartX = canvas.width*.3;
-  let playfieldStartY = 0;
-
-  let gridWidth = 10;
-  let gridHeight = 20;
-
-  let gridPieceWidth = playfieldWidth/gridWidth;
-  let gridPieceHeight = playfieldHeight/gridHeight;
+  
 
   ctx.beginPath();
 
@@ -48,9 +48,22 @@ function drawPlayfield(){
   }
 
 
+  drawGridPiece(7,5,"blue");
+
+
   ctx.closePath();
 }
 
+// r = row counted from bottom (1 to 20)
+// c = column counted from left (1 to 10)
+function drawGridPiece(r,c,color)
+{
+  ctx.fillStyle = color;
+  ctx.fillRect(playfieldStartX + gridPieceWidth*(c-1),
+    playfieldStartY + gridPieceHeight*(20-r),
+    gridPieceWidth,
+    gridPieceHeight);
+}
 // function drawBall() {
 //   ctx.beginPath();
 //   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
