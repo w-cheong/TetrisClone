@@ -1,32 +1,35 @@
 # TetrisClone
 
-# Game Logic
+## Game Logic
+
 * piece rotation
 * wall interactions
 * gravity tick check
 * buffer zone
-# Appearance
-* grid 
+
+## Appearance
+
+* grid
 * piece appearance
 
 ------
 
+## Planning
+global gamegrid (10x20 2D array)
+currentPiece
 
-Want a way to specify which gridpieces to draw which colors.
+listen for user's keypresses. If there are any, handle.
 
-Want a function
-```javascript
-function drawGridPiece(r,c,color){
-
-}
-```
-
-
+each game tick, tetrimino moves down
+checks for if on surface
+after some delay, locks piece
 
 ```javascript
-gameState = {
-    gameGrid = [], //10x20 array of locked pieces. Each entry is an object {occupied: bool, color: string}
-    currentPiece, // {pieceType, orientation?}
-}
-
+gameGrid = [], //10x20 array of locked pieces. Each entry is a string or null
+currentPiece, // {pieceType, orientation?}
 ```
+
+Pieces have their own internal coordinate system (for easier rotation logic?)
+Gets mapped to game grid's coordinate system.
+
+Then every refresh tick, redraw playfield using the `drawGridPiece()` function.
