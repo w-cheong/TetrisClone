@@ -1,5 +1,10 @@
 import {LPiece} from "./piece.js"
-
+import {JPiece} from "./piece.js"
+import {TPiece} from "./piece.js"
+import {OPiece} from "./piece.js"
+import {IPiece} from "./piece.js"
+import {SPiece} from "./piece.js"
+import {ZPiece} from "./piece.js"
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -79,9 +84,21 @@ function drawPlayfield(){
 
   drawPlayFieldState();
 
-  const currentPiece = new LPiece()
-  currentPiece.drawSelf();
-
+  //testing pieces
+  const L_Piece = new LPiece()
+  L_Piece.drawSelf();
+  const J_Piece = new JPiece()
+  J_Piece.drawSelf();
+  const T_Piece = new TPiece()
+  T_Piece.drawSelf();
+  const O_Piece = new OPiece()
+  O_Piece.drawSelf();
+  const I_Piece = new IPiece()
+  I_Piece.drawSelf();
+  const S_Piece = new SPiece()
+  S_Piece.drawSelf();
+  const Z_Piece = new ZPiece()
+  Z_Piece.drawSelf();
   ctx.closePath();
 }
 
