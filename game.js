@@ -19,6 +19,35 @@ let gridHeight = 20;
 let gridPieceWidth = playfieldWidth/gridWidth;
 let gridPieceHeight = playfieldHeight/gridHeight;
 
+let gameGrid = [[null, null, null, null, null, null, null, null, null, null], // 23
+                [null, null, null, null, null, "blue", null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, "cyan", null, null, null, "blue", null, null], // 20
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null], 
+                [null, null, null, null, null, null, null, null, null, null], // 15
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null], 
+                [null, null, null, null, null, null, null, null, null, null], // 10
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, "yellow", null, null, null, null], 
+                [null, null, null, null, null, "yellow", null, null, null, null], // 5
+                [null, null, null, null, null, "yellow", null, null, null, null],
+                [null, null, null, null, null, "yellow", null, null, null, null],
+                [null, null, null, null, null, "yellow", null, null, null, null], // 2
+                [null, null, null, null, null, "yellow", null, null, null, null]]; // 1
+
+/*
+    ......x...
+    ....xxx...
+*/
+
 
 
 function drawPlayfield(){
@@ -46,14 +75,31 @@ function drawPlayfield(){
     }
   }
 
-  drawGridPiece(7,5,"blue");
-
+  drawPlayFieldState();
 
   ctx.closePath();
 }
 
+
+function drawPlayFieldState()
+{
+  //check array for if the position on the playfield should be filled
+  //if filled call drawGridPiece() to fill the color in. 
+  for (let i = 0; i < 20; i++) {
+    for (let j = 0; j < 10; j++) {
+      let element = gameGrid[gameGrid.length - i-1][j];
+      if (element != null) {
+        drawGridPiece(i + 1, j + 1, element);
+        console.log(element);
+      }
+    }
+  }
+}
+
+
 // r = row counted from bottom (1 to 20)
 // c = column counted from left (1 to 10)
+// color = string denoting the color to use
 function drawGridPiece(r,c,color)
 {
   ctx.fillStyle = color;
