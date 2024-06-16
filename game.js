@@ -1,3 +1,5 @@
+import {LPiece} from "./piece.js"
+
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -26,17 +28,17 @@ let gameGrid = [[null, null, null, null, null, null, null, null, null, null], //
                 [null, null, null, null, null, null, null, null, null, null],
                 [null, null, null, null, null, null, null, null, null, null],
                 [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null], 
+                [null, null, null, null, null, null, null, null, null, null],
                 [null, null, null, null, null, null, null, null, null, null], // 15
                 [null, null, null, null, null, null, null, null, null, null],
                 [null, null, null, null, null, null, null, null, null, null],
                 [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null], 
+                [null, null, null, null, null, null, null, null, null, null],
                 [null, null, null, null, null, null, null, null, null, null], // 10
                 [null, null, null, null, null, null, null, null, null, null],
                 [null, null, null, null, null, null, null, null, null, null],
                 [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, "yellow", null, null, null, null], 
+                [null, null, null, null, null, "yellow", null, null, null, null],
                 [null, null, null, null, null, "yellow", null, null, null, null], // 5
                 [null, null, null, null, null, "yellow", null, null, null, null],
                 [null, null, null, null, null, "yellow", null, null, null, null],
@@ -77,6 +79,9 @@ function drawPlayfield(){
 
   drawPlayFieldState();
 
+  const currentPiece = new LPiece()
+  currentPiece.drawSelf();
+
   ctx.closePath();
 }
 
@@ -84,13 +89,12 @@ function drawPlayfield(){
 function drawPlayFieldState()
 {
   //check array for if the position on the playfield should be filled
-  //if filled call drawGridPiece() to fill the color in. 
+  //if filled call drawGridPiece() to fill the color in.
   for (let i = 0; i < 20; i++) {
     for (let j = 0; j < 10; j++) {
       let element = gameGrid[gameGrid.length - i-1][j];
       if (element != null) {
         drawGridPiece(i + 1, j + 1, element);
-        console.log(element);
       }
     }
   }
@@ -100,7 +104,7 @@ function drawPlayFieldState()
 // r = row counted from bottom (1 to 20)
 // c = column counted from left (1 to 10)
 // color = string denoting the color to use
-function drawGridPiece(r,c,color)
+export function drawGridPiece(r,c,color)
 {
   ctx.fillStyle = color;
   ctx.fillRect(playfieldStartX + gridPieceWidth*(c-1),

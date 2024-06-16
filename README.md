@@ -6,11 +6,14 @@
 * wall interactions
 * gravity tick check
 * buffer zone
+* piece bag / randomization
 
 ## Appearance
 
 * grid
 * piece appearance
+* ghost piece
+* next queue
 
 ------
 
