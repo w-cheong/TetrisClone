@@ -47,9 +47,8 @@ let gameGrid = [
   [null, null, null, null, null, "yellow", null, null, null, null] // 1
 ];
 
-// let currentPiece = new LPiece();
-const L_Piece = new pieces.LPiece(playfieldGrid)
-L_Piece.drawSelf();
+let currentPiece = new pieces.LPiece(playfieldGrid)
+currentPiece.drawSelf();
 
 
 function drawPlayfield() {
@@ -73,25 +72,25 @@ function drawPlayfield() {
   // Z_Piece.drawSelf();
 
 
-  let piece = new pieces.IPiece(playfieldGrid, 3, 5, "north");
-  // piece = new pieces.IPiece(playfieldGrid, 3, 5, "east");
-  // piece = new pieces.IPiece(playfieldGrid, 3, 5, "south");
-  piece = new pieces.IPiece(playfieldGrid, 3, 5, "west");
+  let piece = new pieces.ZPiece(playfieldGrid, 3, 6, "north");
+  // piece.setOrientation('east')
+  // piece.setOrientation('south')
+  // piece.setOrientation('west')
   piece.drawSelf();
   piece.drawPieceCenter();
 
   if (rightPressed) {
-    L_Piece.moveRight();
+    currentPiece.moveRight();
   } if (leftPressed) {
-    L_Piece.moveLeft();
+    currentPiece.moveLeft();
   } if (upPressed) {
-    L_Piece.moveUp();
+    currentPiece.moveUp();
   }
   if (downPressed) {
-    L_Piece.moveDown();
+    currentPiece.moveDown();
   }
-  L_Piece.drawSelf();
 
+  currentPiece.drawSelf();
 }
 
 
@@ -136,6 +135,8 @@ function startGame() {
   document.addEventListener("keyup", keyUpHandler, false);
 
   function keyDownHandler(e) {
+    console.log('Pressed: ' + e.key);
+
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = true;
     } else if (e.key === "Left" || e.key === "ArrowLeft") {
@@ -144,6 +145,12 @@ function startGame() {
       upPressed = true;
     } else if (e.key === "Down" || e.key === "ArrowDown") {
       downPressed = true;
+    } else if (e.key === 'd') {
+      currentPiece.rotateCCW();
+      drawPlayfield();
+    } else if (e.key === 'f') {
+      currentPiece.rotateCW();
+      drawPlayfield();
     }
   }
 
@@ -156,11 +163,10 @@ function startGame() {
       upPressed = false;
     } else if (e.key === "Down" || e.key === "ArrowDown") {
       downPressed = false;
-
     }
   }
 
-  const interval = setInterval(draw, 250);
+  const interval = setInterval(draw, 50);
 
 }
 

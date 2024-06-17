@@ -92,8 +92,13 @@ export class Piece {
     }
   }
 
-  drawPieceCenter(){
+  drawPieceCenter() {
     this.grid.fillGridCell(this.centerY, this.centerX, "rgb(155 155 155 / 75%)")
+  }
+
+  // for debugging
+  setOrientation(orient){
+    this.orientation = orient
   }
 
   /**
@@ -113,7 +118,7 @@ export class Piece {
    *
    * @returns {string} the orientation of the piece
    */
-  getOrientation(){
+  getOrientation() {
     return this.orientation
   }
 }
@@ -128,13 +133,11 @@ export class LPiece extends Piece {
     */
     this.offsetsTable = {
       "north": [[-1, 0], [0, 0], [1, 0], [1, 1]],
-      "south": [],
-      "east":[],
-      "west":[],
+      "east": [[0, 0], [0, 1], [0, -1], [1, -1]],
+      "south": [[0, 0], [1, 0], [-1, 0], [-1, -1]],
+      "west": [[0, 1], [-1, 1], [0, 0], [0, -1]],
     }
-
   }
-
 }
 
 export class JPiece extends Piece {
@@ -146,9 +149,9 @@ export class JPiece extends Piece {
     */
     this.offsetsTable = {
       "north": [[-1, 1], [-1, 0], [0, 0], [1, 0]],
-      "south": [],
-      "east":[],
-      "west":[],
+      "east": [[0, 0], [0, 1], [1, 1], [0, -1]],
+      "south": [[0, 0], [1, 0], [1, -1], [-1, 0]],
+      "west": [[0, 0], [0, 1], [0, -1], [-1, -1]],
     }
   }
 
@@ -163,9 +166,9 @@ export class TPiece extends Piece {
     */
     this.offsetsTable = {
       "north": [[-1, 0], [0, 0], [0, 1], [1, 0]],
-      "south": [],
-      "east":[],
-      "west":[],
+      "east": [[0, 0], [0, 1], [1, 0], [0, -1]],
+      "south": [[0, 0], [0, -1], [-1, 0], [1, 0]],
+      "west": [[-1, 0], [0, 1], [0, 0], [0, -1]],
     }
   }
 }
@@ -179,9 +182,9 @@ export class OPiece extends Piece {
     */
     this.offsetsTable = {
       "north": [[0, 1], [0, 0], [1, 0], [1, 1]],
-      "south": [],
-      "east":[],
-      "west":[],
+      "south": [[0, 1], [0, 0], [1, 0], [1, 1]],
+      "east": [[0, 1], [0, 0], [1, 0], [1, 1]],
+      "west": [[0, 1], [0, 0], [1, 0], [1, 1]],
     }
   }
 
@@ -211,9 +214,9 @@ export class SPiece extends Piece {
     */
     this.offsetsTable = {
       "north": [[-1, 0], [0, 0], [0, 1], [1, 1]],
-      "south": [],
-      "east":[],
-      "west":[],
+      "east": [[0, 0], [0, 1], [1, 0], [1, -1]],
+      "south": [[0, 0], [1, 0], [0, -1], [-1, -1]],
+      "west": [[0, 0], [0, -1], [-1, 0], [-1, 1]],
     }
   }
 
@@ -229,9 +232,9 @@ export class ZPiece extends Piece {
     */
     this.offsetsTable = {
       "north": [[-1, 1], [0, 1], [0, 0], [1, 0]],
-      "south": [],
-      "east":[],
-      "west":[],
+      "east": [[0, 0], [0, -1], [1, 0], [1, 1]],
+      "south": [[0, 0], [-1, 0], [0, -1], [1, -1]],
+      "west": [[0, 0], [0, 1], [-1, 0], [-1, -1]],
     }
   }
 }
