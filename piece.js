@@ -73,10 +73,10 @@ export class Piece {
   }
 
   // TODO: Implement these
-  moveLeft() { return null; }
-  moveRight() { return null; }
-  moveUp() { return null; }
-  moveDown() { return null; }
+  moveLeft() { this.centerX--; }
+  moveRight() {  this.centerX++;}
+  moveUp() { this.centerY++; }
+  moveDown() { this.centerY--; }
 
   softDrop() { return null; }
   hardDrop() { return null; }
