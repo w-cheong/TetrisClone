@@ -23,7 +23,8 @@ export class Grid {
   }
 
   /**
-   * Draws this Grid object onto its assigned canvas
+   * Draws this Grid object onto its assigned canvas.
+   * Clears canvas and redraws grid lines.
    */
   draw() {
 
@@ -43,7 +44,6 @@ export class Grid {
       }
       this.ctx.closePath();
     }
-
   }
 
   /**

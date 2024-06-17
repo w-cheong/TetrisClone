@@ -11,7 +11,6 @@ const canvas = document.getElementById("testCanvas");
 
 let grid = new Grid(canvas, 8, 8);
 grid.draw();
-console.log('filling cell 2,2')
 grid.fillGridCell(1, 1, 'rgb(255 0 0 / 25%')
 
 /**
@@ -28,8 +27,9 @@ let testPiece = null;
 /*
 These tests should be for checking individual entries in the kick table,
 and the rotations using that.
+These use (x,y) coordinates, 1-indexed
 */
-let tests = [
+let rotationTests = [
   {
     "Piece Type": "I",
     "Rotation Type": "CW",
@@ -58,7 +58,7 @@ These tests are for checking that the correct rotation point gets chosen.
 Diagrams with red blocks in Appendix A.
 Assume the correct final placement of the piece after rotation (this should get tested by the other series of tests)
 */
-let testsWithObstacles = [
+let rotationTestsWithObstacles = [
   {
     "Piece Type": "I",
     "Rotation Type": "CW",
@@ -81,25 +81,116 @@ let testsWithObstacles = [
   // TODO add more
 ]
 
-function runTests() {
-  for (test of tests) {
-    console.log(test)
-    // create the piece at the specified location
 
-    // draw the piece
+const timer = ms => new Promise(res => setTimeout(res, ms))
 
-    // time delay for visual
+/**
+ * Execute a specific rotation test
+ * @param {rotationTests} test
+ */
+async function runRotationTest(test) {
 
-    // call the rotation method
+  console.log('Test to be run:')
+  console.log(test)
 
-    // draw the new position
+  let pieceType = test["Piece Type"]
+  let initialOrientation = test["Initial Orientation"]
+  let startingPos = test["Starting Position"]
+  let rotationType = test["Rotation Type"]
+  let rotationPoint = test["Rotation Point"]
 
-    // check that final position and orientation are correct
-
-    // time delay for visual
-
-
+  // initialize test piece with specified position and orientation
+  testPiece = null;
+  switch (pieceType) {
+    case 'L':
+      testPiece = new LPiece(grid, startingPos[0], startingPos[1], initialOrientation);
+      break;
+    case 'J':
+      testPiece = new JPiece(grid, startingPos[0], startingPos[1], initialOrientation);
+      break;
+    case 'T':
+      testPiece = new TPiece(grid, startingPos[0], startingPos[1], initialOrientation);
+      break;
+    case 'O':
+      testPiece = new OPiece(grid, startingPos[0], startingPos[1], initialOrientation);
+      break;
+    case 'I':
+      testPiece = new IPiece(grid, startingPos[0], startingPos[1], initialOrientation);
+      break;
+    case 'S':
+      testPiece = new SPiece(grid, startingPos[0], startingPos[1], initialOrientation);
+      break;
+    case 'Z':
+      testPiece = new ZPiece(grid, startingPos[0], startingPos[1], initialOrientation);
+      break;
+    default:
+      console.log(`Invalid piece type: ${pieceType}`)
   }
+
+  // draw the piece
+  grid.draw();
+  testPiece.drawSelf();
+
+  // check that piece spawned in correct location
+  if (!sameCoordinates(test['Initial Occupied'], testPiece.getGridCoords())) {
+    console.log(`Piece did not spawn correctly. Expected ${test["Initial Occupied"]}, but got ${testPiece.getGridCoords()}`);
+    // alert("Piece did not spawn correctly.")
+    console.log('Expected:')
+    console.log(test["Initial Occupied"])
+    console.log('Got:')
+    console.log(testPiece.getGridCoords())
+  } else {
+    console.log('Piece spawned correctly');
+    // alert("Piece spawned correctly.")
+  }
+
+  // time delay for visual
+  await timer(2000);
+
+  // rotate the piece
+  console.log('Performing rotation')
+  switch (rotationType) {
+    case 'CW':
+      testPiece.rotateCW(rotationPoint)
+      break;
+    case 'CCW':
+      testPiece.rotateCCW(rotationPoint)
+      break;
+    default:
+      console.log(`Invalid rotation type: ${rotationType}`);
+  }
+
+  console.log('Redrawing after rotation.')
+  // piece after rotation
+  grid.draw();
+  testPiece.drawSelf();
+  await timer(2000);
+
+  // check the final orientation is correct
+  const expectedOrientation = test["Final Orientation"]
+  if (testPiece.getOrientation() !== expectedOrientation) {
+    console.log(`Incorrect orientation. Expected ${expectedOrientation.toString()} but got ${testPiece.getOrientation()}`);
+  } else {
+    console.log('Correct orientation after rotation')
+  }
+
+  // check the final position is correct
+  if (!sameCoordinates(test["Final Occupied"], testPiece.getGridCoords())) {
+    console.log(`Incorrect position. Expected ${test["Final Occupied"]} but got ${testPiece.getGridCoords()}`);
+    console.log(test["Final Occupied"]);
+    console.log(testPiece.getGridCoords());
+  } else {
+    console.log('Correct position after rotation')
+  }
+}
+
+async function runTests() {
+  for (const test of rotationTests) {
+    await timer(2000);
+    runRotationTest(test)
+    await timer(2000);
+  }
+  console.log('Finished running test suite')
 }
 
 /**
@@ -109,4 +200,29 @@ function draw() {
   grid.draw();
 }
 
-// runTests()
+
+function sameCoordinates(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  // convert coords from number[] to string
+  let arr1Str = arr1.map((x) => x.toString())
+  let arr2Str = arr2.map((x) => x.toString())
+
+  return arr1Str.every(coord => arr2Str.includes(coord))
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+runTests()
+
+function drawState(){
+  grid.draw();
+  testPiece?.drawSelf();
+  testPiece?.drawPieceCenter();
+}
+
+setInterval(drawState, 10);

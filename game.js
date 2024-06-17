@@ -70,6 +70,14 @@ function drawPlayfield() {
   const Z_Piece = new pieces.ZPiece(playfieldGrid)
   Z_Piece.drawSelf();
 
+
+  let piece = new pieces.IPiece(playfieldGrid, 3, 5, "north");
+  // piece = new pieces.IPiece(playfieldGrid, 3, 5, "east");
+  // piece = new pieces.IPiece(playfieldGrid, 3, 5, "south");
+  piece = new pieces.IPiece(playfieldGrid, 3, 5, "west");
+  piece.drawSelf();
+  piece.drawPieceCenter();
+
 }
 
 

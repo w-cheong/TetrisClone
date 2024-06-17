@@ -15,10 +15,62 @@ export class Piece {
     this.centerY = centerY;
     this.orientation = orientation;
     this.color = color;
+
+    this.kickTable = null;
+    /**
+     * Maps direction string to array of (x,y) pairs
+     */
+    this.offsetsTable = null;
+    this.offsets = null;
   }
 
-  rotateCW() { return null; }
-  rotateCCW() { return null; }
+  /**
+   * Attempt to rotate piece clockwise
+   * @param {number|undefined} rotationCenter
+   * @returns {number} -1 if failed to rotate, otherwise returns rotation center used to perform the rotation
+   */
+  rotateCW(rotationCenter) {
+    switch (this.orientation) {
+      case 'north':
+        this.orientation = 'east';
+        break;
+      case 'east':
+        this.orientation = 'south';
+        break;
+      case 'south':
+        this.orientation = 'west';
+        break;
+      case 'west':
+        this.orientation = 'north';
+        break;
+    }
+    // todo multiple centers
+    return 1;
+  }
+
+  /**
+   * Attempt to rotate piece counterclockwise
+   * @param {number|undefined} rotationCenter
+   * @returns {number} -1 if failed to rotate, otherwise returns rotation center used to perform the rotation
+   */
+  rotateCCW(rotationCenter) {
+    switch (this.orientation) {
+      case 'north':
+        this.orientation = 'west';
+        break;
+      case 'east':
+        this.orientation = 'north';
+        break;
+      case 'south':
+        this.orientation = 'east';
+        break;
+      case 'west':
+        this.orientation = 'south';
+        break;
+    }
+    // todo multiple centers
+    return 1;
+  }
 
   // TODO: Implement these
   moveLeft() { return null; }
@@ -30,13 +82,39 @@ export class Piece {
   hardDrop() { return null; }
 
   drawSelf() {
-    for (const [xOffset, yOffset] of this.offsets) {
+    let offsets = this.offsetsTable[this.orientation];
+    for (const [xOffset, yOffset] of offsets) {
       this.grid.fillGridCell(
         this.centerY + yOffset,
         this.centerX + xOffset,
         this.color
       );
     }
+  }
+
+  drawPieceCenter(){
+    this.grid.fillGridCell(this.centerY, this.centerX, "rgb(155 155 155 / 75%)")
+  }
+
+  /**
+   * Returns a list of coordinates that the piece occupies on the grid.
+   * Returned as (x,y) pairs both 1-indexed
+   * @return {number[][]}
+   */
+  getGridCoords() {
+    let arr = []
+    for (const [xOffset, yOffset] of this.offsetsTable[this.orientation]) {
+      arr.push([this.centerX + xOffset, this.centerY + yOffset])
+    }
+    return arr
+  }
+
+  /**
+   *
+   * @returns {string} the orientation of the piece
+   */
+  getOrientation(){
+    return this.orientation
   }
 }
 
@@ -48,7 +126,13 @@ export class LPiece extends Piece {
           .
       .[.].
     */
-    this.offsets = [[-1, 0], [0, 0], [1, 0], [1, 1]]
+    this.offsetsTable = {
+      "north": [[-1, 0], [0, 0], [1, 0], [1, 1]],
+      "south": [],
+      "east":[],
+      "west":[],
+    }
+
   }
 
 }
@@ -60,7 +144,12 @@ export class JPiece extends Piece {
       .
       .[.].
     */
-    this.offsets = [[-1, 1], [-1, 0], [0, 0], [1, 0]]
+    this.offsetsTable = {
+      "north": [[-1, 1], [-1, 0], [0, 0], [1, 0]],
+      "south": [],
+      "east":[],
+      "west":[],
+    }
   }
 
 }
@@ -72,10 +161,13 @@ export class TPiece extends Piece {
         .
       .[.].
     */
-    this.offsets = [[-1, 0], [0, 0], [0, 1], [1, 0]]
-
+    this.offsetsTable = {
+      "north": [[-1, 0], [0, 0], [0, 1], [1, 0]],
+      "south": [],
+      "east":[],
+      "west":[],
+    }
   }
-
 }
 
 export class OPiece extends Piece {
@@ -85,7 +177,12 @@ export class OPiece extends Piece {
       . .
      [.].
     */
-    this.offsets = [[0, 1], [0, 0], [1, 0], [1, 1]]
+    this.offsetsTable = {
+      "north": [[0, 1], [0, 0], [1, 0], [1, 1]],
+      "south": [],
+      "east":[],
+      "west":[],
+    }
   }
 
 }
@@ -96,9 +193,13 @@ export class IPiece extends Piece {
     /*
       .[.]. .
     */
-    this.offsets = [[-1, 0], [0, 0], [1, 0], [2, 0]]
+    this.offsetsTable = {
+      "north": [[-1, 0], [0, 0], [1, 0], [2, 0]],
+      "east": [[1, 0], [1, 1], [1, -1], [1, -2]],
+      "south": [[-1, -1], [0, -1], [1, -1], [2, -1]],
+      "west": [[0, 0], [0, 1], [0, -1], [0, -2]],
+    }
   }
-
 }
 
 export class SPiece extends Piece {
@@ -108,7 +209,12 @@ export class SPiece extends Piece {
         . .
       .[.]
     */
-    this.offsets = [[-1, 0], [0, 0], [0, 1], [1, 1]]
+    this.offsetsTable = {
+      "north": [[-1, 0], [0, 0], [0, 1], [1, 1]],
+      "south": [],
+      "east":[],
+      "west":[],
+    }
   }
 
 }
@@ -121,7 +227,11 @@ export class ZPiece extends Piece {
       . .
        [.].
     */
-    this.offsets = [[-1, 1], [0, 1], [0, 0], [1, 0]]
+    this.offsetsTable = {
+      "north": [[-1, 1], [0, 1], [0, 0], [1, 0]],
+      "south": [],
+      "east":[],
+      "west":[],
+    }
   }
-
 }
