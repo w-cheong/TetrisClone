@@ -1,10 +1,5 @@
-import {LPiece} from "./piece.js"
-import {JPiece} from "./piece.js"
-import {TPiece} from "./piece.js"
-import {OPiece} from "./piece.js"
-import {IPiece} from "./piece.js"
-import {SPiece} from "./piece.js"
-import {ZPiece} from "./piece.js"
+import {LPiece, JPiece, TPiece, OPiece, IPiece, SPiece, ZPiece} from "./piece.js"
+
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -55,6 +50,8 @@ let gameGrid = [[null, null, null, null, null, null, null, null, null, null], //
     ....xxx...
 */
 
+// let currentPiece = new LPiece();
+
 
 
 function drawPlayfield(){
@@ -99,6 +96,7 @@ function drawPlayfield(){
   S_Piece.drawSelf();
   const Z_Piece = new ZPiece()
   Z_Piece.drawSelf();
+
   ctx.closePath();
 }
 

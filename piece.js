@@ -1,10 +1,11 @@
 import { drawGridPiece } from "./game.js";
 
 class Piece {
-  constructor() { // each specific piece should override this.
-    this.centerX = -1;
-    this.centerY = 0;
-    this.orientation = "north";
+  constructor(centerX=-1, centerY=0, orientation="north", color="yellow") {
+    this.centerX = centerX;
+    this.centerY = centerY;
+    this.orientation = orientation;
+    this.color = color;
   }
 
   // must be implemented in derived classes
@@ -14,7 +15,6 @@ class Piece {
   moveRight() { return null; }
   softDrop() { return null; }
   hardDrop() { return null; }
-
 
   drawSelf() {
     for (const [xOffset, yOffset] of this.offsets) {
@@ -29,12 +29,8 @@ class Piece {
 
 export class LPiece extends Piece {
   constructor() { // each specific piece should override this.
-    super();
-    this.centerX = 9;
-    this.centerY = 1;
-    this.orientation = "north";
-    this.color = "orange"
-    /*  
+    super(8, 1, "north", "orange");
+    /*
           .
       .[.].
     */
@@ -45,13 +41,9 @@ export class LPiece extends Piece {
 
 export class JPiece extends Piece {
   constructor() { // each specific piece should override this.
-    super();
-    this.centerX = 3;
-    this.centerY = 11;
-    this.orientation = "north";
-    this.color = "blue"
-    /*  
-      .    
+    super(3, 11, "north", "blue");
+    /*
+      .
       .[.].
     */
     this.offsets = [[-1, 1], [-1, 0], [0, 0], [1, 0]]
@@ -61,29 +53,22 @@ export class JPiece extends Piece {
 
 export class TPiece extends Piece {
   constructor() { // each specific piece should override this.
-    super();
-    this.centerX = 7;
-    this.centerY = 9;
-    this.orientation = "north";
-    this.color = "purple"
-    /*  
-        .    
+    super(7, 9, "north", "purple");
+    /*
+        .
       .[.].
     */
-    this.offsets = [[-1, 0], [0, 0], [0, 1], [1, 0]]
+    this.offsets = [[-1,0],[0,0],[0,1],[1,0]]
+
   }
 
 }
 
 export class OPiece extends Piece {
   constructor() { // each specific piece should override this.
-    super();
-    this.centerX = 8;
-    this.centerY = 13;
-    this.orientation = "north";
-    this.color = "yellow"
-    /*  
-      . .   
+    super(8, 13, "north", "yellow");
+    /*
+      . .
      [.].
     */
     this.offsets = [[0, 1], [0, 0], [1, 0], [1, 1]]
@@ -93,12 +78,8 @@ export class OPiece extends Piece {
 
 export class IPiece extends Piece {
   constructor() { // each specific piece should override this.
-    super();
-    this.centerX = 2;
-    this.centerY = 15;
-    this.orientation = "north";
-    this.color = "cyan"
-    /*         
+    super(2, 15, "north", "cyan");
+    /*
       .[.]. .
     */
     this.offsets = [[-1, 0], [0, 0], [1, 0], [2, 0]]
@@ -108,13 +89,9 @@ export class IPiece extends Piece {
 
 export class SPiece extends Piece {
   constructor() { // each specific piece should override this.
-    super();
-    this.centerX = 3;
-    this.centerY = 1;
-    this.orientation = "north";
-    this.color = "limeGreen"
-    /*  
-        . .  
+    super(3, 1, "north", "limeGreen");
+    /*
+        . .
       .[.]
     */
     this.offsets = [[-1, 0], [0, 0], [0, 1], [1, 1]]
@@ -125,13 +102,9 @@ export class SPiece extends Piece {
 
 export class ZPiece extends Piece {
   constructor() { // each specific piece should override this.
-    super();
-    this.centerX = 2;
-    this.centerY = 3;
-    this.orientation = "north";
-    this.color = "red"
-    /*  
-      . .  
+    super(2, 3, "north", "red");
+    /*
+      . .
        [.].
     */
     this.offsets = [[-1, 1], [0, 1], [0, 0], [1, 0]]
