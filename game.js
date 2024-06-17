@@ -1,136 +1,112 @@
-import {LPiece, JPiece, TPiece, OPiece, IPiece, SPiece, ZPiece} from "./piece.js"
+import * as pieces from "./piece.js";
 
-const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
+import { Grid } from "./grid.js";
 
-let x = canvas.width / 2;
-let y = canvas.height - 30;
+const playfieldCanvas = document.getElementById("playfield");
+const playfieldCTX = playfieldCanvas.getContext("2d");
+
+const holdAreaCanvas = document.getElementById('holdArea');
+const holdAreaCTX = holdAreaCanvas.getContext("2d");
+
+const nextQueueCanvas = document.getElementById('nextQueue');
+const nextQueueCTX = nextQueueCanvas.getContext("2d");
+
 
 let rightPressed = false;
 let leftPressed = false;
-// 10 by 20
-let playfieldWidth = canvas.width*.4;
-let playfieldHeight = canvas.height;
 
-let playfieldStartX = canvas.width*.3;
-let playfieldStartY = 0;
+let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
+let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
+let nextQueueGrid = new Grid(nextQueueCanvas, 4, 17, true);
 
-let gridWidth = 10;
-let gridHeight = 20;
-
-let gridPieceWidth = playfieldWidth/gridWidth;
-let gridPieceHeight = playfieldHeight/gridHeight;
-
-let gameGrid = [[null, null, null, null, null, null, null, null, null, null], // 23
-                [null, null, null, null, null, "blue", null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, "cyan", null, null, null, "blue", null, null], // 20
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null], // 15
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null], // 10
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, null, null, null, null, null],
-                [null, null, null, null, null, "yellow", null, null, null, null],
-                [null, null, null, null, null, "yellow", null, null, null, null], // 5
-                [null, null, null, null, null, "yellow", null, null, null, null],
-                [null, null, null, null, null, "yellow", null, null, null, null],
-                [null, null, null, null, null, "yellow", null, null, null, null], // 2
-                [null, null, null, null, null, "yellow", null, null, null, null]]; // 1
-
-/*
-    ......x...
-    ....xxx...
-*/
+let gameGrid = [
+  [null, null, null, null, null, null, null, null, null, null], // 23
+  [null, null, null, null, null, "blue", null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, "cyan", null, null, null, "blue", null, null], // 20
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null], // 15
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null], // 10
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, "yellow", null, null, null, null],
+  [null, null, null, null, null, "yellow", null, null, null, null], // 5
+  [null, null, null, null, null, "yellow", null, null, null, null],
+  [null, null, null, null, null, "yellow", null, null, null, null],
+  [null, null, null, null, null, "yellow", null, null, null, null], // 2
+  [null, null, null, null, null, "yellow", null, null, null, null] // 1
+];
 
 // let currentPiece = new LPiece();
 
 
+function drawPlayfield() {
 
-function drawPlayfield(){
-
-  ctx.beginPath();
-
-  // overall playfield
-  ctx.rect(
-    playfieldStartX,
-    playfieldStartY,
-    playfieldWidth,
-    playfieldHeight
-  )
-  ctx.fillStyle = "#000000";
-  ctx.fill();
-
-  // draw grid within playfield
-  for (let c = 0; c < gridWidth; c++) {
-    for (let r = 0; r < gridHeight; r++) {
-      ctx.strokeStyle = "gray";
-      ctx.strokeRect(
-        playfieldStartX + c*gridPieceWidth,
-        playfieldStartY + r*gridPieceHeight,
-        gridPieceWidth, gridPieceHeight);
-    }
-  }
+  playfieldGrid.draw()
 
   drawPlayFieldState();
 
   //testing pieces
-  const L_Piece = new LPiece()
+  const L_Piece = new pieces.LPiece(playfieldGrid)
   L_Piece.drawSelf();
-  const J_Piece = new JPiece()
+  const J_Piece = new pieces.JPiece(playfieldGrid)
   J_Piece.drawSelf();
-  const T_Piece = new TPiece()
+  const T_Piece = new pieces.TPiece(playfieldGrid)
   T_Piece.drawSelf();
-  const O_Piece = new OPiece()
+  const O_Piece = new pieces.OPiece(playfieldGrid)
   O_Piece.drawSelf();
-  const I_Piece = new IPiece()
+  const I_Piece = new pieces.IPiece(playfieldGrid)
   I_Piece.drawSelf();
-  const S_Piece = new SPiece()
+  const S_Piece = new pieces.SPiece(playfieldGrid)
   S_Piece.drawSelf();
-  const Z_Piece = new ZPiece()
+  const Z_Piece = new pieces.ZPiece(playfieldGrid)
   Z_Piece.drawSelf();
 
-  ctx.closePath();
 }
 
 
-function drawPlayFieldState()
-{
+function drawPlayFieldState() {
   //check array for if the position on the playfield should be filled
   //if filled call drawGridPiece() to fill the color in.
   for (let i = 0; i < 20; i++) {
     for (let j = 0; j < 10; j++) {
-      let element = gameGrid[gameGrid.length - i-1][j];
+      let element = gameGrid[gameGrid.length - i - 1][j];
       if (element != null) {
-        drawGridPiece(i + 1, j + 1, element);
+        playfieldGrid.fillGridCell(i+1, j+1, element);
       }
     }
   }
 }
 
-
-// r = row counted from bottom (1 to 20)
-// c = column counted from left (1 to 10)
-// color = string denoting the color to use
-export function drawGridPiece(r,c,color)
-{
-  ctx.fillStyle = color;
-  ctx.fillRect(playfieldStartX + gridPieceWidth*(c-1),
-    playfieldStartY + gridPieceHeight*(20-r),
-    gridPieceWidth,
-    gridPieceHeight);
+function drawHoldArea(){
+// TODO
+holdAreaGrid.draw();
 }
 
+function drawNextQueue(){
+// TODO
+nextQueueGrid.draw();
+}
+
+function drawShadow(){
+  // TODO
+}
+
+
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawPlayfield();
+  drawHoldArea();
+  drawNextQueue()
+  drawShadow();
 }
 
 function startGame() {

@@ -1,16 +1,29 @@
-
 <!doctype html>
 <html lang="en-US">
-  <head>
-    <meta charset="utf-8" />
-    <title>Tetris</title>
-    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
-  </head>
-  <body>
-    <canvas id="myCanvas" width="600" height="500"></canvas>
-    <!-- <button id="runButton">Start game</button> -->
 
-    <script src="./game.js" type="module"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <title>Tetris</title>
+  <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+
+<body>
+
+  <div id="game" class="grid">
+    <div id="leftArea">
+      <canvas id="holdArea" width="120" height="120"></canvas>
+    </div>
+    <div id="centerArea">
+      <!-- grid cell is 30px by 30px -->
+      <canvas id="playfield" width="300" height="600"></canvas>
+    </div>
+    <div id="rightArea">
+      <!-- next 6 tetriminos should be shown. 2*6+5 = 17 cells total -->
+      <canvas id="nextQueue" width="120" height="510"></canvas>
+    </div>
+  </div>
+
+  <script src="./game.js" type="module"></script>
+</body>
+
 </html>
-

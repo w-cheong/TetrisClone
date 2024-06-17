@@ -1,13 +1,40 @@
 * {
   padding: 0;
   margin: 0;
+  border: 1px solid red;
 }
 
-canvas {
-  background: #eee;
+body{
+  display: table;
+  margin: 0 auto;
+}
+
+#game{
+  padding: 2rem;
+}
+
+.grid {
+  /* put things in a row */
+  display: grid;
+  gap: 1rem;
+  grid-auto-flow: column;
+  margin: 0 0 1rem 0;
+}
+
+#playfield {
+  background: #000;
   display: block;
   margin: 0 auto;
 }
+
+#holdArea {
+  background: #000;
+}
+
+#nextQueue {
+  background: #000;
+}
+
 
 button {
   display: block;
