@@ -14,6 +14,8 @@ const nextQueueCTX = nextQueueCanvas.getContext("2d");
 
 let rightPressed = false;
 let leftPressed = false;
+let upPressed = false;
+let downPressed = false;
 
 let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
 let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
@@ -46,6 +48,8 @@ let gameGrid = [
 ];
 
 // let currentPiece = new LPiece();
+const L_Piece = new pieces.LPiece(playfieldGrid)
+L_Piece.drawSelf();
 
 
 function drawPlayfield() {
@@ -55,20 +59,18 @@ function drawPlayfield() {
   drawPlayFieldState();
 
   //testing pieces
-  const L_Piece = new pieces.LPiece(playfieldGrid)
-  L_Piece.drawSelf();
-  const J_Piece = new pieces.JPiece(playfieldGrid)
-  J_Piece.drawSelf();
-  const T_Piece = new pieces.TPiece(playfieldGrid)
-  T_Piece.drawSelf();
-  const O_Piece = new pieces.OPiece(playfieldGrid)
-  O_Piece.drawSelf();
-  const I_Piece = new pieces.IPiece(playfieldGrid)
-  I_Piece.drawSelf();
-  const S_Piece = new pieces.SPiece(playfieldGrid)
-  S_Piece.drawSelf();
-  const Z_Piece = new pieces.ZPiece(playfieldGrid)
-  Z_Piece.drawSelf();
+  // const J_Piece = new pieces.JPiece(playfieldGrid)
+  // J_Piece.drawSelf();
+  // const T_Piece = new pieces.TPiece(playfieldGrid)
+  // T_Piece.drawSelf();
+  // const O_Piece = new pieces.OPiece(playfieldGrid)
+  // O_Piece.drawSelf();
+  // const I_Piece = new pieces.IPiece(playfieldGrid)
+  // I_Piece.drawSelf();
+  // const S_Piece = new pieces.SPiece(playfieldGrid)
+  // S_Piece.drawSelf();
+  // const Z_Piece = new pieces.ZPiece(playfieldGrid)
+  // Z_Piece.drawSelf();
 
 
   let piece = new pieces.IPiece(playfieldGrid, 3, 5, "north");
@@ -77,6 +79,18 @@ function drawPlayfield() {
   piece = new pieces.IPiece(playfieldGrid, 3, 5, "west");
   piece.drawSelf();
   piece.drawPieceCenter();
+
+  if (rightPressed) {
+    L_Piece.moveRight();
+  } if (leftPressed) {
+    L_Piece.moveLeft();
+  } if (upPressed) {
+    L_Piece.moveUp();
+  }
+  if (downPressed) {
+    L_Piece.moveDown();
+  }
+  L_Piece.drawSelf();
 
 }
 
@@ -88,23 +102,23 @@ function drawPlayFieldState() {
     for (let j = 0; j < 10; j++) {
       let element = gameGrid[gameGrid.length - i - 1][j];
       if (element != null) {
-        playfieldGrid.fillGridCell(i+1, j+1, element);
+        playfieldGrid.fillGridCell(i + 1, j + 1, element);
       }
     }
   }
 }
 
-function drawHoldArea(){
-// TODO
-holdAreaGrid.draw();
+function drawHoldArea() {
+  // TODO
+  holdAreaGrid.draw();
 }
 
-function drawNextQueue(){
-// TODO
-nextQueueGrid.draw();
+function drawNextQueue() {
+  // TODO
+  nextQueueGrid.draw();
 }
 
-function drawShadow(){
+function drawShadow() {
   // TODO
 }
 
@@ -126,6 +140,10 @@ function startGame() {
       rightPressed = true;
     } else if (e.key === "Left" || e.key === "ArrowLeft") {
       leftPressed = true;
+    } else if (e.key === "Up" || e.key === "ArrowUp") {
+      upPressed = true;
+    } else if (e.key === "Down" || e.key === "ArrowDown") {
+      downPressed = true;
     }
   }
 
@@ -134,10 +152,15 @@ function startGame() {
       rightPressed = false;
     } else if (e.key === "Left" || e.key === "ArrowLeft") {
       leftPressed = false;
+    } else if (e.key === "Up" || e.key === "ArrowUp") {
+      upPressed = false;
+    } else if (e.key === "Down" || e.key === "ArrowDown") {
+      downPressed = false;
+
     }
   }
 
-  const interval = setInterval(draw, 10);
+  const interval = setInterval(draw, 250);
 
 }
 
