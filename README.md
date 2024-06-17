@@ -37,6 +37,12 @@ Gets mapped to game grid's coordinate system.
 
 Then every refresh tick, redraw playfield using the `drawGridPiece()` function.
 
+## Task List
+* [X] Draw all pieces in their default orientation (north)
+* [ ] Add moving of pieces (with collision avoidance)
+  * [ ] Listen to keybinds
+* [ ] Draw all pieces in their other orientations
+* [ ] Add rotation of pieces (with kick table)
 
 ## References
 
