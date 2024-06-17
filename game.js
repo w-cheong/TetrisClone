@@ -21,7 +21,7 @@ let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
 let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
 let nextQueueGrid = new Grid(nextQueueCanvas, 4, 17, true);
 
-let gameGrid = [
+export let gameGrid = [
   [null, null, null, null, null, null, null, null, null, null], // 23
   [null, null, null, null, null, "blue", null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
@@ -32,7 +32,7 @@ let gameGrid = [
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null], // 15
   [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, "green", null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null], // 10
@@ -135,7 +135,7 @@ function startGame() {
   document.addEventListener("keyup", keyUpHandler, false);
 
   function keyDownHandler(e) {
-    console.log('Pressed: ' + e.key);
+    // console.log('Pressed: ' + e.key);
 
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = true;

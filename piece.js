@@ -1,4 +1,5 @@
 import { Grid } from "./grid.js";
+import { gameGrid } from "./game.js";
 
 export class Piece {
 
@@ -72,14 +73,53 @@ export class Piece {
     return 1;
   }
 
-  // TODO: Implement these
-  moveLeft() { this.centerX--; }
-  moveRight() {  this.centerX++;}
-  moveUp() { this.centerY++; }
-  moveDown() { this.centerY--; }
+  moveLeft() {
+    this.centerX--;
+    if (this.checkForCollision()) {
+      this.centerX++;
+    }
+  }
+  moveRight() {
+    this.centerX++;
+    if (this.checkForCollision()) {
+      this.centerX--;
+    }
+  }
+  moveUp() { 
+    this.centerY++; 
+    if(this.checkForCollision()){
+      this.centerY--;
+    }
+  }
+  moveDown() { 
+    this.centerY--; 
+    if(this.checkForCollision()){
+      this.centerY++;
+    }
+  }
 
   softDrop() { return null; }
   hardDrop() { return null; }
+
+  /**
+   * @returns true if collision in current position
+   */
+  checkForCollision(){
+    console.log(this.getGridCoords());
+    for(const [x, y] of this.getGridCoords())
+      {
+        console.log(x + " " + y);
+        if(x < 1 || x > this.grid.gridWidth || y < 1 || y > this.grid.gridHeight + 4)
+          {
+            return true;
+          }
+        if(gameGrid[gameGrid.length - y][x-1] !== null)
+          {
+            return true;
+          }
+      }
+    return false;
+  }
 
   drawSelf() {
     let offsets = this.offsetsTable[this.orientation];
