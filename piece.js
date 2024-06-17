@@ -14,6 +14,16 @@ class Piece {
   moveRight() { return null; }
   softDrop() { return null; }
   hardDrop() { return null; }
+
+
+  drawSelf() {
+    for (const [xOffset, yOffset] of this.offsets) {
+      drawGridPiece(
+        this.centerY + yOffset,
+        this.centerX + xOffset,
+        this.color);
+    }
+  }
 }
 
 
@@ -28,16 +38,7 @@ export class LPiece extends Piece {
           .
       .[.].
     */
-    this.offsets = [[-1,0],[0,0],[1,0],[1,1]]
-  }
-
-  drawSelf(){
-    for (const[xOffset, yOffset] of this.offsets){
-      drawGridPiece(
-        this.centerY + yOffset,
-        this.centerX + xOffset,
-        this.color);
-    }
+    this.offsets = [[-1, 0], [0, 0], [1, 0], [1, 1]]
   }
 
 }
@@ -53,16 +54,7 @@ export class JPiece extends Piece {
       .    
       .[.].
     */
-    this.offsets = [[-1,1],[-1,0],[0,0],[1,0]]
-  }
-
-  drawSelf(){
-    for (const[xOffset, yOffset] of this.offsets){
-      drawGridPiece(
-        this.centerY + yOffset,
-        this.centerX + xOffset,
-        this.color);
-    }
+    this.offsets = [[-1, 1], [-1, 0], [0, 0], [1, 0]]
   }
 
 }
@@ -78,17 +70,9 @@ export class TPiece extends Piece {
         .    
       .[.].
     */
-    this.offsets = [[-1,0],[0,0],[0,1],[1,0]]
+    this.offsets = [[-1, 0], [0, 0], [0, 1], [1, 0]]
   }
 
-  drawSelf(){
-    for (const[xOffset, yOffset] of this.offsets){
-      drawGridPiece(
-        this.centerY + yOffset,
-        this.centerX + xOffset,
-        this.color);
-    }
-  }
 }
 
 export class OPiece extends Piece {
@@ -102,17 +86,9 @@ export class OPiece extends Piece {
       . .   
      [.].
     */
-    this.offsets = [[0,1],[0,0],[1,0],[1,1]]
+    this.offsets = [[0, 1], [0, 0], [1, 0], [1, 1]]
   }
 
-  drawSelf(){
-    for (const[xOffset, yOffset] of this.offsets){
-      drawGridPiece(
-        this.centerY + yOffset,
-        this.centerX + xOffset,
-        this.color);
-    }
-  }
 }
 
 export class IPiece extends Piece {
@@ -125,17 +101,9 @@ export class IPiece extends Piece {
     /*         
       .[.]. .
     */
-    this.offsets = [[-1,0],[0,0],[1,0],[2,0]]
+    this.offsets = [[-1, 0], [0, 0], [1, 0], [2, 0]]
   }
 
-  drawSelf(){
-    for (const[xOffset, yOffset] of this.offsets){
-      drawGridPiece(
-        this.centerY + yOffset,
-        this.centerX + xOffset,
-        this.color);
-    }
-  }
 }
 
 export class SPiece extends Piece {
@@ -149,17 +117,9 @@ export class SPiece extends Piece {
         . .  
       .[.]
     */
-    this.offsets = [[-1,0],[0,0],[0,1],[1,1]]
+    this.offsets = [[-1, 0], [0, 0], [0, 1], [1, 1]]
   }
 
-  drawSelf(){
-    for (const[xOffset, yOffset] of this.offsets){
-      drawGridPiece(
-        this.centerY + yOffset,
-        this.centerX + xOffset,
-        this.color);
-    }
-  }
 }
 
 
@@ -174,15 +134,7 @@ export class ZPiece extends Piece {
       . .  
        [.].
     */
-    this.offsets = [[-1,1],[0,1],[0,0],[1,0]]
+    this.offsets = [[-1, 1], [0, 1], [0, 0], [1, 0]]
   }
 
-  drawSelf(){
-    for (const[xOffset, yOffset] of this.offsets){
-      drawGridPiece(
-        this.centerY + yOffset,
-        this.centerX + xOffset,
-        this.color);
-    }
-  }
 }
