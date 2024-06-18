@@ -118,14 +118,11 @@ export class Piece {
 
     console.log('failed to rotate')
 
-    if (rotationCenter === -1){
-      // failed to rotate. Recover previous state
-      this.centerX = startingX;
-      this.centerY = startingY;
-      this.orientation = prevOrientation;
-      return -1; // for debugging
-    }
-    return -2; // this should not happen
+    // failed to rotate. Recover previous state
+    this.centerX = startingX;
+    this.centerY = startingY;
+    this.orientation = prevOrientation;
+    return -1;
   }
 
   /**
@@ -186,14 +183,11 @@ export class Piece {
     }
 
     console.log('Failed to rotate')
-    if (rotationCenter === -1){
-      // failed to rotate. Recover previous state
-      this.centerX = startingX;
-      this.centerY = startingY;
-      this.orientation = prevOrientation;
-      return -1; // for debugging
-    }
-    return -2; // this should not happen
+    // failed to rotate. Recover previous state
+    this.centerX = startingX;
+    this.centerY = startingY;
+    this.orientation = prevOrientation;
+    return -1; // for debugging
   }
 
   moveLeft() {
