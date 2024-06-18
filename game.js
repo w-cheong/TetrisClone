@@ -76,6 +76,7 @@ function drawPlayfield() {
     currentPiece.moveDown();
   }
   currentPiece.drawSelf();
+  currentPiece.drawPieceCenter();
 }
 
 
@@ -116,7 +117,7 @@ function lineClear(){
           //move all lines above a row down
           gameGrid.splice(i, 1);
           gameGrid.unshift([null, null, null, null, null, null, null, null, null, null]);
-          //gameGrid[0] = [null, null, null, null, null, null, null, null, null, null];          
+          //gameGrid[0] = [null, null, null, null, null, null, null, null, null, null];
           counter++;
           console.log(gameGrid);
         }

@@ -89,6 +89,9 @@ export class Piece {
         break;
     }
 
+    console.log(`Trying to rotate ${prevOrientation} -> ${this.orientation}`)
+    console.log(`kickIndex: ${kickIndex}`)
+
     if (rotationCenter === undefined){
       // try each rotation center in kick table
       for (let i = 1; i <= 5; i++){
@@ -97,6 +100,7 @@ export class Piece {
 
         if(!this.checkForCollision()){
           // no collision
+          console.log(`Rotated with center ${i}`)
           return i;
         }
       }
@@ -111,6 +115,8 @@ export class Piece {
         return rotationCenter;
       }
     }
+
+    console.log('failed to rotate')
 
     if (rotationCenter === -1){
       // failed to rotate. Recover previous state
@@ -152,6 +158,9 @@ export class Piece {
         break;
     }
 
+    console.log(`Trying to rotate ${prevOrientation} -> ${this.orientation}`)
+    console.log(`kickIndex: ${kickIndex}`)
+
     if (rotationCenter === undefined){
       // try each rotation center in kick table
       for (let i = 1; i<= 5; i++){
@@ -160,6 +169,7 @@ export class Piece {
 
         if(!this.checkForCollision()){
           // no collision
+          console.log(`Rotated with center ${i}`)
           return i;
         }
       }
@@ -175,6 +185,7 @@ export class Piece {
       }
     }
 
+    console.log('Failed to rotate')
     if (rotationCenter === -1){
       // failed to rotate. Recover previous state
       this.centerX = startingX;
