@@ -106,6 +106,28 @@ function drawShadow() {
   // TODO
 }
 
+function lineClear(){
+  let counter = 0;
+  for(let i = gameGrid.length - 1; i > 0; i--)
+    {
+      if(!(gameGrid[i].includes(null)))
+        {
+          //clear line
+          gameGrid.splice(i, 1);
+          gameGrid.unshift([null, null, null, null, null, null, null, null, null, null]);
+          //gameGrid[0] = [null, null, null, null, null, null, null, null, null, null];          
+          counter++;
+          //move all lines above a row down
+          // for(let j = i; j > 0; j--) {
+          //   gameGrid[j] = gameGrid[j-1];
+          // }
+          console.log(gameGrid);
+        }
+        
+    }
+
+}
+
 /**
  *  @returns a newly constructed random tetris piece
  */
@@ -159,8 +181,8 @@ function startGame() {
       drawPlayfield();
     } else if (e.key === ' ') {
       currentPiece.hardDrop();
+      lineClear();
       currentPiece = generateRandomPiece(); // should generate new piece randomly
-
       // console.log(gameGrid);
     }
   }
