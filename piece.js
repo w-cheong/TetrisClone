@@ -140,7 +140,7 @@ export class Piece {
         break;
       case 'east':
         this.orientation = 'north';
-        kickIndex = "L->2"
+        kickIndex = "R->0"
         break;
       case 'south':
         this.orientation = 'east';
@@ -148,7 +148,7 @@ export class Piece {
         break;
       case 'west':
         this.orientation = 'south';
-        kickIndex = "R->0"
+        kickIndex = "L->2"
         break;
     }
 
