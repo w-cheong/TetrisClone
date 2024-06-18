@@ -17,34 +17,35 @@ let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 
+
 let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
 let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
 let nextQueueGrid = new Grid(nextQueueCanvas, 4, 17, true);
 
 export let gameGrid = [
   [null, null, null, null, null, null, null, null, null, null], // 23
-  [null, null, null, null, null, "blue", null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, "cyan", null, null, null, "blue", null, null], // 20
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null], // 20
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null], // 15
   [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, "green", null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null], // 10
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, "yellow", null, null, null, null],
-  [null, null, null, null, null, "yellow", null, null, null, null], // 5
-  [null, null, null, null, null, "yellow", null, null, null, null],
-  [null, null, null, null, null, "yellow", null, null, null, null],
-  [null, null, null, null, null, "yellow", null, null, null, null], // 2
-  [null, null, null, null, null, "yellow", null, null, null, null] // 1
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null], // 5
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null], // 2
+  [null, null, null, null, null, null, null, null, null, null] // 1
 ];
 
 let currentPiece = new pieces.LPiece(playfieldGrid)
@@ -57,27 +58,12 @@ function drawPlayfield() {
 
   drawPlayFieldState();
 
-  //testing pieces
-  // const J_Piece = new pieces.JPiece(playfieldGrid)
-  // J_Piece.drawSelf();
-  // const T_Piece = new pieces.TPiece(playfieldGrid)
-  // T_Piece.drawSelf();
-  // const O_Piece = new pieces.OPiece(playfieldGrid)
-  // O_Piece.drawSelf();
-  // const I_Piece = new pieces.IPiece(playfieldGrid)
-  // I_Piece.drawSelf();
-  // const S_Piece = new pieces.SPiece(playfieldGrid)
-  // S_Piece.drawSelf();
-  // const Z_Piece = new pieces.ZPiece(playfieldGrid)
-  // Z_Piece.drawSelf();
-
-
-  let piece = new pieces.ZPiece(playfieldGrid, 3, 6, "north");
+  // let piece = new pieces.ZPiece(playfieldGrid, 3, 6, "north");
   // piece.setOrientation('east')
   // piece.setOrientation('south')
   // piece.setOrientation('west')
-  piece.drawSelf();
-  piece.drawPieceCenter();
+  // piece.drawSelf();
+  // piece.drawPieceCenter();
 
   if (rightPressed) {
     currentPiece.moveRight();
@@ -89,7 +75,6 @@ function drawPlayfield() {
   if (downPressed) {
     currentPiece.moveDown();
   }
-
   currentPiece.drawSelf();
 }
 
@@ -121,6 +106,27 @@ function drawShadow() {
   // TODO
 }
 
+/**
+ *  @returns a newly constructed random tetris piece
+ */
+function generateRandomPiece() {
+  switch (Math.floor(Math.random() * 7)) {
+    case 0:
+      return new pieces.LPiece(playfieldGrid);
+    case 1:
+      return new pieces.JPiece(playfieldGrid);
+    case 2:
+      return new pieces.TPiece(playfieldGrid);
+    case 3:
+      return new pieces.OPiece(playfieldGrid);
+    case 4:
+      return new pieces.IPiece(playfieldGrid);
+    case 5:
+      return new pieces.SPiece(playfieldGrid);
+    case 6:
+      return new pieces.ZPiece(playfieldGrid);
+  }
+}
 
 function draw() {
   // ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -135,7 +141,7 @@ function startGame() {
   document.addEventListener("keyup", keyUpHandler, false);
 
   function keyDownHandler(e) {
-    // console.log('Pressed: ' + e.key);
+    console.log('Pressed: ' + e.key);
 
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = true;
@@ -151,6 +157,11 @@ function startGame() {
     } else if (e.key === 'f') {
       currentPiece.rotateCW();
       drawPlayfield();
+    } else if (e.key === ' ') {
+      currentPiece.hardDrop();
+      currentPiece = generateRandomPiece(); // should generate new piece randomly
+
+      // console.log(gameGrid);
     }
   }
 

@@ -25,6 +25,8 @@ export class Piece {
     this.offsets = null;
   }
 
+
+
   /**
    * Attempt to rotate piece clockwise
    * @param {number|undefined} rotationCenter
@@ -85,42 +87,54 @@ export class Piece {
       this.centerX--;
     }
   }
-  moveUp() { 
-    this.centerY++; 
-    if(this.checkForCollision()){
+  moveUp() {
+    this.centerY++;
+    if (this.checkForCollision()) {
       this.centerY--;
     }
   }
-  moveDown() { 
-    this.centerY--; 
-    if(this.checkForCollision()){
+  moveDown() {
+    this.centerY--;
+    if (this.checkForCollision()) {
       this.centerY++;
     }
   }
 
   softDrop() { return null; }
-  hardDrop() { return null; }
+  hardDrop() {
+    while (!(this.checkForCollision())) {
+      this.centerY--;
+    }
+    this.centerY++;
+    this.pieceToGrid();
+    
+  }
 
   /**
    * @returns true if collision in current position
    */
-  checkForCollision(){
+  checkForCollision() {
     console.log(this.getGridCoords());
-    for(const [x, y] of this.getGridCoords())
-      {
-        console.log(x + " " + y);
-        if(x < 1 || x > this.grid.gridWidth || y < 1 || y > this.grid.gridHeight + 4)
-          {
-            return true;
-          }
-        if(gameGrid[gameGrid.length - y][x-1] !== null)
-          {
-            return true;
-          }
+    for (const [x, y] of this.getGridCoords()) {
+      console.log(x + " " + y);
+      if (x < 1 || x > this.grid.gridWidth || y < 1 || y > this.grid.gridHeight + 4) {
+        return true;
       }
+      if (gameGrid[gameGrid.length - y][x - 1] !== null) {
+        return true;
+      }
+    }
     return false;
   }
 
+  pieceToGrid() {
+    //if piece is locked down
+    //stop moving piece
+    //add piece to grid
+    for (const [x, y] of this.getGridCoords()) {
+      gameGrid[gameGrid.length - y][x - 1] = this.color;
+    }
+  }
   drawSelf() {
     let offsets = this.offsetsTable[this.orientation];
     for (const [xOffset, yOffset] of offsets) {
@@ -137,7 +151,7 @@ export class Piece {
   }
 
   // for debugging
-  setOrientation(orient){
+  setOrientation(orient) {
     this.orientation = orient
   }
 
@@ -165,7 +179,7 @@ export class Piece {
 
 
 export class LPiece extends Piece {
-  constructor(grid, centerX = 8, centerY = 1, orientation = "north") {
+  constructor(grid, centerX = 6, centerY = 21, orientation = "north") {
     super(grid, centerX, centerY, orientation, 'orange');
     /*
           .
@@ -181,7 +195,7 @@ export class LPiece extends Piece {
 }
 
 export class JPiece extends Piece {
-  constructor(grid, centerX = 3, centerY = 11, orientation = 'north') {
+  constructor(grid, centerX = 6, centerY = 21, orientation = 'north') {
     super(grid, centerX, centerY, orientation, 'blue');
     /*
       .
@@ -198,7 +212,7 @@ export class JPiece extends Piece {
 }
 
 export class TPiece extends Piece {
-  constructor(grid, centerX = 7, centerY = 9, orientation = 'north') {
+  constructor(grid, centerX = 6, centerY = 21, orientation = 'north') {
     super(grid, centerX, centerY, orientation, 'purple');
     /*
         .
@@ -214,7 +228,7 @@ export class TPiece extends Piece {
 }
 
 export class OPiece extends Piece {
-  constructor(grid, centerX = 8, centerY = 13, orientation = 'north') {
+  constructor(grid, centerX = 6, centerY = 21, orientation = 'north') {
     super(grid, centerX, centerY, orientation, 'yellow');
     /*
       . .
@@ -231,7 +245,7 @@ export class OPiece extends Piece {
 }
 
 export class IPiece extends Piece {
-  constructor(grid, centerX = 2, centerY = 15, orientation = 'north') {
+  constructor(grid, centerX = 6, centerY = 21, orientation = 'north') {
     super(grid, centerX, centerY, orientation, 'cyan');
     /*
       .[.]. .
@@ -246,7 +260,7 @@ export class IPiece extends Piece {
 }
 
 export class SPiece extends Piece {
-  constructor(grid, centerX = 3, centerY = 1, orientation = 'north') {
+  constructor(grid, centerX = 6, centerY = 21, orientation = 'north') {
     super(grid, centerX, centerY, orientation, 'limeGreen');
     /*
         . .
@@ -264,7 +278,7 @@ export class SPiece extends Piece {
 
 
 export class ZPiece extends Piece {
-  constructor(grid, centerX = 2, centerY = 3, orientation = 'north') {
+  constructor(grid, centerX = 6, centerY = 21, orientation = 'north') {
     super(grid, centerX, centerY, orientation, 'red');
     /*
       . .
