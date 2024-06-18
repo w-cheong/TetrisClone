@@ -1,5 +1,5 @@
 import { Grid } from "./grid.js";
-import { gameGrid } from "./game.js";
+import { gameGrid, playfieldGrid, holdAreaGrid } from "./game.js";
 
 export class Piece {
 
@@ -55,6 +55,20 @@ export class Piece {
      */
     this.offsetsTable = null;
     this.offsets = null;
+  }
+
+  moveToPlayfieldGrid(){
+    this.grid = playfieldGrid;
+    this.orientation = 'north';
+    this.centerX = 6;
+    this.centerY = 21;
+  }
+
+  moveToHoldGrid(){
+    this.grid = holdAreaGrid;
+    this.orientation = 'north';
+    this.centerX = 2;
+    this.centerY = 2;
   }
 
   /**
@@ -320,6 +334,10 @@ export class LPiece extends Piece {
     //   'west':[],
     // }
     this.kickTable = Piece.kickTable3Piece;
+  }
+
+  clone() {
+    return new LPiece()
   }
 }
 

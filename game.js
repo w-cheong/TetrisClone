@@ -27,9 +27,11 @@ let ticksElapsed = 0;
 let initialTicksUntilMoveDown = 10
 let ticksUntilMoveDown = initialTicksUntilMoveDown;
 
+let holdPressed = false;
+let holdPiece = null;
 
-let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
-let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
+export let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
+export let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
 let nextQueueGrid = new Grid(nextQueueCanvas, 4, 17, true);
 
 export let gameGrid = [
@@ -58,7 +60,7 @@ export let gameGrid = [
   [null, null, null, null, null, null, null, null, null, null] // 1
 ];
 
-let currentPiece = new pieces.LPiece(playfieldGrid)
+let currentPiece = new generateRandomPiece()
 currentPiece.drawSelf();
 
 
@@ -104,8 +106,8 @@ function drawPlayFieldState() {
 }
 
 function drawHoldArea() {
-  // TODO
   holdAreaGrid.draw();
+  holdPiece?.drawSelf();
 }
 
 function drawNextQueue() {
@@ -200,6 +202,21 @@ function startGame() {
       currentPiece.hardDrop();
       lineClear();
       currentPiece = generateRandomPiece(); // should generate new piece randomly
+      holdPressed = false;
+    } else if (e.key === 'Shift' && !holdPressed) {
+      holdPressed = true;
+      if (holdPiece !== null) { //if hold has a piece
+        let tempPiece = currentPiece;
+        currentPiece = holdPiece;
+        holdPiece = tempPiece;
+      } else { //if hold has no piece
+        holdPiece = currentPiece;
+        currentPiece = generateRandomPiece(); //must change for hold bar
+      }
+      holdPiece.moveToHoldGrid();
+      holdPiece.drawSelf(); //need to show something
+      currentPiece.moveToPlayfieldGrid();
+      currentPiece.drawSelf();
     }
   }
 
