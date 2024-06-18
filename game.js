@@ -107,25 +107,20 @@ function drawShadow() {
 }
 
 function lineClear(){
-  let counter = 0;
+  let counter = 0; //note: create text display for single, double, triple, tetris using this
   for(let i = gameGrid.length - 1; i > 0; i--)
     {
       if(!(gameGrid[i].includes(null)))
         {
           //clear line
+          //move all lines above a row down
           gameGrid.splice(i, 1);
           gameGrid.unshift([null, null, null, null, null, null, null, null, null, null]);
           //gameGrid[0] = [null, null, null, null, null, null, null, null, null, null];          
           counter++;
-          //move all lines above a row down
-          // for(let j = i; j > 0; j--) {
-          //   gameGrid[j] = gameGrid[j-1];
-          // }
           console.log(gameGrid);
         }
-        
     }
-
 }
 
 /**
@@ -183,7 +178,6 @@ function startGame() {
       currentPiece.hardDrop();
       lineClear();
       currentPiece = generateRandomPiece(); // should generate new piece randomly
-      // console.log(gameGrid);
     }
   }
 
