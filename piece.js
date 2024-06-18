@@ -4,6 +4,35 @@ import { gameGrid } from "./game.js";
 export class Piece {
 
   /**
+   * https://tetris.wiki/Super_Rotation_System
+   * 0 = spawn
+   * R = clockwise rotation "right" from spawn
+   * L = ccw rotation "left" from spawn
+   * 2 = two rotations in either direction from spawn
+   */
+  static kickTable3Piece = {
+    '0->R': [[0, 0], [-1, 0], [-1, +1], [0, -2], [-1, -2]],
+    "R->0": [[0, 0], [+1, 0], [+1, -1], [0, +2], [+1, +2]],
+    "R->2": [[0, 0], [+1, 0], [+1, -1], [0, +2], [+1, +2]],
+    "2->R": [[0, 0], [-1, 0], [-1, +1], [0, -2], [-1, -2]],
+    "2->L": [[0, 0], [+1, 0], [+1, +1], [0, -2], [+1, -2]],
+    "L->2": [[0, 0], [-1, 0], [-1, -1], [0, +2], [-1, +2]],
+    "L->0": [[0, 0], [-1, 0], [-1, -1], [0, +2], [-1, +2]],
+    "0->L": [[0, 0], [+1, 0], [+1, +1], [0, -2], [+1, -2]],
+  }
+
+  static kickTable4Piece = {
+    "0->R": [[0, 0], [-2, 0], [+1, 0], [-2, -1], [+1, +2]],
+    "R->0": [[0, 0], [+2, 0], [-1, 0], [+2, +1], [-1, -2]],
+    "R->2": [[0, 0], [-1, 0], [+2, 0], [-1, +2], [+2, -1]],
+    "2->R": [[0, 0], [+1, 0], [-2, 0], [+1, -2], [-2, +1]],
+    "2->L": [[0, 0], [+2, 0], [-1, 0], [+2, +1], [-1, -2]],
+    "L->2": [[0, 0], [-2, 0], [+1, 0], [-2, -1], [+1, +2]],
+    "L->0": [[0, 0], [+1, 0], [-2, 0], [+1, -2], [-2, +1]],
+    "0->L": [[0, 0], [-1, 0], [+2, 0], [-1, +2], [+2, -1]],
+  }
+
+  /**
    * @param {Grid} grid Grid object that this Tetrimino belongs to
    * @param {number} centerX X position (grid coordinate) of the "main center" of the piece
    * @param {number} centerY Y position (grid coordinate) of the "main center" of the piece
@@ -17,7 +46,10 @@ export class Piece {
     this.orientation = orientation;
     this.color = color;
 
+
+    // either kickTable3Piece or kickTable4Piece
     this.kickTable = null;
+
     /**
      * Maps direction string to array of (x,y) pairs
      */
@@ -25,54 +57,132 @@ export class Piece {
     this.offsets = null;
   }
 
-
-
   /**
    * Attempt to rotate piece clockwise
-   * @param {number|undefined} rotationCenter
+   * @param {number|undefined} rotationCenter (1 to 5 inclusive)
    * @returns {number} -1 if failed to rotate, otherwise returns rotation center used to perform the rotation
    */
   rotateCW(rotationCenter) {
+    let prevOrientation = this.orientation;
+    let startingX = this.centerX;
+    let startingY = this.centerY;
+    let kickIndex = null;
+
+    // need to try out different positions in the new rotation
+    // to see if one is possible
     switch (this.orientation) {
       case 'north':
         this.orientation = 'east';
+        kickIndex = '0->R';
         break;
       case 'east':
         this.orientation = 'south';
+        kickIndex = 'R->2';
         break;
       case 'south':
         this.orientation = 'west';
+        kickIndex = '2->L';
         break;
       case 'west':
         this.orientation = 'north';
+        kickIndex = 'L->0';
         break;
     }
-    // todo multiple centers
-    return 1;
+
+    if (rotationCenter === undefined){
+      // try each rotation center in kick table
+      for (let i = 1; i <= 5; i++){
+        this.centerX = startingX + this.kickTable[kickIndex][i-1][0];
+        this.centerY = startingY + this.kickTable[kickIndex][i-1][1];
+
+        if(!this.checkForCollision()){
+          // no collision
+          return i;
+        }
+      }
+    } else { // rotation to try is passed in. For debugging/testing
+
+      // adjust center for the kick
+      this.centerX += this.kickTable[kickIndex][rotationCenter-1][0]
+      this.centerY += this.kickTable[kickIndex][rotationCenter-1][1]
+
+      if(!this.checkForCollision()){
+        // no collision
+        return rotationCenter;
+      }
+    }
+
+    if (rotationCenter === -1){
+      // failed to rotate. Recover previous state
+      this.centerX = startingX;
+      this.centerY = startingY;
+      this.orientation = prevOrientation;
+      return -1; // for debugging
+    }
+    return -2; // this should not happen
   }
 
   /**
    * Attempt to rotate piece counterclockwise
-   * @param {number|undefined} rotationCenter
+   * @param {number|undefined} rotationCenter (1 to 5 inclusive)
    * @returns {number} -1 if failed to rotate, otherwise returns rotation center used to perform the rotation
    */
   rotateCCW(rotationCenter) {
+    let prevOrientation = this.orientation;
+    let startingX = this.centerX;
+    let startingY = this.centerY;
+    let kickIndex = null;
+
     switch (this.orientation) {
       case 'north':
         this.orientation = 'west';
+        kickIndex = "0->L"
         break;
       case 'east':
         this.orientation = 'north';
+        kickIndex = "L->2"
         break;
       case 'south':
         this.orientation = 'east';
+        kickIndex = "2->R"
         break;
       case 'west':
         this.orientation = 'south';
+        kickIndex = "R->0"
         break;
     }
-    // todo multiple centers
-    return 1;
+
+    if (rotationCenter === undefined){
+      // try each rotation center in kick table
+      for (let i = 1; i<= 5; i++){
+        this.centerX = startingX + this.kickTable[kickIndex][i-1][0];
+        this.centerY = startingY + this.kickTable[kickIndex][i-1][1];
+
+        if(!this.checkForCollision()){
+          // no collision
+          return i;
+        }
+      }
+    } else { // rotation to try is passed in. For debugging/testing
+
+      // adjust center for the kick
+      this.centerX += this.kickTable[kickIndex][rotationCenter-1][0]
+      this.centerY += this.kickTable[kickIndex][rotationCenter-1][1]
+
+      if(!this.checkForCollision()){
+        // no collision
+        return rotationCenter;
+      }
+    }
+
+    if (rotationCenter === -1){
+      // failed to rotate. Recover previous state
+      this.centerX = startingX;
+      this.centerY = startingY;
+      this.orientation = prevOrientation;
+      return -1; // for debugging
+    }
+    return -2; // this should not happen
   }
 
   moveLeft() {
@@ -89,13 +199,13 @@ export class Piece {
   }
   moveUp() {
     this.centerY++;
-    if (this.checkForCollision()) {
+    if(this.checkForCollision()){
       this.centerY--;
     }
   }
   moveDown() {
     this.centerY--;
-    if (this.checkForCollision()) {
+    if(this.checkForCollision()){
       this.centerY++;
     }
   }
@@ -107,7 +217,7 @@ export class Piece {
     }
     this.centerY++;
     this.pieceToGrid();
-    
+
   }
 
   /**
@@ -151,7 +261,7 @@ export class Piece {
   }
 
   // for debugging
-  setOrientation(orient) {
+  setOrientation(orient){
     this.orientation = orient
   }
 
@@ -191,6 +301,20 @@ export class LPiece extends Piece {
       "south": [[0, 0], [1, 0], [-1, 0], [-1, -1]],
       "west": [[0, 1], [-1, 1], [0, 0], [0, -1]],
     }
+
+    // this.kickTableCW = {
+    //   'north': [[0,0], [-1, 0], [-1, 1], [0, -2], [-1, -2]],
+    //   'east': [[0,0], [1, 0], [1, -1], [0, 2], [1, 2]],
+    //   'south': [[0,0], [1,0], [1,1], [0,-2], [1, -2]],
+    //   'west':[],
+    // }
+    // this.kickTableCCW = {
+    //   'north': [[0,0], [1, 0], [1, 1], [0, -2], [1, -2]],
+    //   'east': [[0,0], [1,0], [1,-1], [0,2], [1,2]],
+    //   'south': [],
+    //   'west':[],
+    // }
+    this.kickTable = Piece.kickTable3Piece;
   }
 }
 
@@ -207,6 +331,7 @@ export class JPiece extends Piece {
       "south": [[0, 0], [1, 0], [1, -1], [-1, 0]],
       "west": [[0, 0], [0, 1], [0, -1], [-1, -1]],
     }
+    this.kickTable = Piece.kickTable3Piece;
   }
 
 }
@@ -224,6 +349,7 @@ export class TPiece extends Piece {
       "south": [[0, 0], [0, -1], [-1, 0], [1, 0]],
       "west": [[-1, 0], [0, 1], [0, 0], [0, -1]],
     }
+    this.kickTable = Piece.kickTable3Piece;
   }
 }
 
@@ -240,6 +366,7 @@ export class OPiece extends Piece {
       "east": [[0, 1], [0, 0], [1, 0], [1, 1]],
       "west": [[0, 1], [0, 0], [1, 0], [1, 1]],
     }
+    this.kickTable = Piece.kickTable3Piece;
   }
 
 }
@@ -256,6 +383,8 @@ export class IPiece extends Piece {
       "south": [[-1, -1], [0, -1], [1, -1], [2, -1]],
       "west": [[0, 0], [0, 1], [0, -1], [0, -2]],
     }
+
+    this.kickTable = Piece.kickTable4Piece;
   }
 }
 
@@ -272,6 +401,7 @@ export class SPiece extends Piece {
       "south": [[0, 0], [1, 0], [0, -1], [-1, -1]],
       "west": [[0, 0], [0, -1], [-1, 0], [-1, 1]],
     }
+    this.kickTable = Piece.kickTable3Piece;
   }
 
 }
@@ -290,5 +420,6 @@ export class ZPiece extends Piece {
       "south": [[0, 0], [-1, 0], [0, -1], [1, -1]],
       "west": [[0, 0], [0, 1], [-1, 0], [-1, -1]],
     }
+    this.kickTable = Piece.kickTable3Piece;
   }
 }
