@@ -109,7 +109,7 @@ function drawShadow() {
 
 function lineClear(){
   let counter = 0; //note: create text display for single, double, triple, tetris using this
-  for(let i = gameGrid.length - 1; i > 0; i--)
+  for(let i = gameGrid.length - 1; i >= 0;)
     {
       if(!(gameGrid[i].includes(null)))
         {
@@ -120,6 +120,8 @@ function lineClear(){
           //gameGrid[0] = [null, null, null, null, null, null, null, null, null, null];
           counter++;
           console.log(gameGrid);
+        } else {
+          i--;
         }
     }
 }
