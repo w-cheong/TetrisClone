@@ -17,6 +17,16 @@ let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 
+// let startingDelay = 300;
+// let autoDownDelay = startingDelay;
+
+let totalLinesCleared = 0;
+
+let ticksElapsed = 0;
+
+let initialTicksUntilMoveDown = 10
+let ticksUntilMoveDown = initialTicksUntilMoveDown;
+
 
 let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
 let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
@@ -124,6 +134,8 @@ function lineClear(){
           i--;
         }
     }
+    totalLinesCleared += counter;
+    ticksUntilMoveDown = initialTicksUntilMoveDown - Math.round(3*totalLinesCleared/5)
 }
 
 /**
@@ -154,6 +166,13 @@ function draw() {
   drawHoldArea();
   drawNextQueue()
   drawShadow();
+
+  ticksElapsed++;
+  if (ticksElapsed >= ticksUntilMoveDown){
+    console.log('here')
+    ticksElapsed = 0;
+    currentPiece.moveDown();
+  }
 }
 
 function startGame() {
@@ -198,7 +217,22 @@ function startGame() {
 
   const interval = setInterval(draw, 50);
 
+  // const gravity = setTimeout(moveCurrentPieceDown, autoDownDelay);
 }
+
+// function updateGravity (callback, totalLinesCleared){
+//   var internalCallback = function (){
+//     return function() {
+//       let newDelay = startingDelay - Math.round(totalLinesCleared*.1);
+//       window.setTimeout(internalCallback, newDelay)
+//     }
+//   }
+//   window.setTimeout(newDelay)
+// }
+
+// function moveCurrentPieceDown(){
+//   currentPiece.moveDown();
+// }
 
 startGame();
 // document.getElementById("runButton").addEventListener("click", function () {
