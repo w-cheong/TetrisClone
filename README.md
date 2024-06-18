@@ -1,7 +1,7 @@
 # TetrisClone
 
 ## Game Logic
-
+The most integral part of the project. Proper game functionality.
 * piece rotation
 * wall interactions
 * gravity tick check
@@ -9,7 +9,7 @@
 * piece bag / randomization
 
 ## Appearance
-
+Cosmetic details meant to enhance the user experience.
 * grid
 * piece appearance
 * ghost piece
@@ -24,7 +24,7 @@ currentPiece
 listen for user's keypresses. If there are any, handle.
 
 each game tick, tetrimino moves down
-checks for if on surface
+checks for if piece is on surface
 after some delay, locks piece
 
 ```javascript
@@ -39,10 +39,27 @@ Then every refresh tick, redraw playfield using the `drawGridPiece()` function.
 
 ## Task List
 * [X] Draw all pieces in their default orientation (north)
-* [ ] Add moving of pieces (with collision avoidance)
-  * [ ] Listen to keybinds
-* [ ] Draw all pieces in their other orientations
-* [ ] Add rotation of pieces (with kick table)
+* [X] Add moving of pieces (with collision avoidance)
+  * [X] Listen to keybinds
+* [X] Draw all pieces in their other orientations
+* [X] Add rotation of pieces (with kick table) 
+  * [ ] Check accuracy of rotation of pieces (with kick table)
+* [X] Add gravity of pieces 
+* [ ] Add game over condition (Pieces stop dropping after certain conditions)
+* [X] Add hold function
+* [ ] Add next queue pieces 
+* [ ] Textbar for controls (cosmetic) 
+  * [ ] Customizable keyboard binding???
+  * [ ] Audio (Sound effects, background music)
+  * [ ] Text appearing on screen for singles, doubles, triples, and tetrises cleared
+  * [ ] Text for combos (# of drops in a row that cause line clears)
+  * [ ] Scoring (+ high scores list???)
+* [ ] Increasing gravity speed over time
+* [ ] Pieces stop being controlled when landing without hard drop ***
+* [ ] Add shadow piece (should show where piece lands after hard drop)
+  * [ ] Add autoplay
+* [ ] Pause function (automatically when switching windows and/or pause button)
+
 
 ## References
 
