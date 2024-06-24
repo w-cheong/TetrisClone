@@ -205,7 +205,10 @@ function startGame() {
   document.addEventListener("keyup", keyUpHandler, false);
 
   function keyDownHandler(e) {
-    console.log('Pressed: ' + e.key);
+    console.log('Keydown: ' + e.key);
+    if (gameOver){
+      return
+    }
 
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = true;
