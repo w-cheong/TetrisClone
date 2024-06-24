@@ -239,6 +239,14 @@ export class Piece {
 
   }
 
+  // shadowToGrid() {
+  //   while (!(this.checkForCollision())) {
+  //     this.centerY--;
+  //   }
+  //   this.centerY++;
+  //   this.color = "DimGray"
+  // }
+
   /**
    * @returns true if collision in current position
    */
@@ -395,7 +403,7 @@ export class OPiece extends Piece {
 }
 
 export class IPiece extends Piece {
-  constructor(grid, centerX = 6, centerY = 21, orientation = 'north') {
+  constructor(grid, centerX = 6, centerY = 22, orientation = 'north') {
     super(grid, centerX, centerY, orientation, 'cyan');
     /*
       .[.]. .

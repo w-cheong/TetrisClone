@@ -54,11 +54,11 @@ Then every refresh tick, redraw playfield using the `drawGridPiece()` function.
   * [ ] Text appearing on screen for singles, doubles, triples, and tetrises cleared
   * [ ] Text for combos (# of drops in a row that cause line clears)
   * [ ] Scoring (+ high scores list???)
-* [ ] Increasing gravity speed over time
+* [X] Increasing gravity speed over time
 * [ ] Pieces stop being controlled when landing without hard drop ***
 * [ ] Add shadow piece (should show where piece lands after hard drop)
   * [ ] Add autoplay
-* [ ] Pause function (automatically when switching windows and/or pause button)
+* [X] Pause function (automatically when switching windows and/or pause button)
 
 
 ## References

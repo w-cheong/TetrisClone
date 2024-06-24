@@ -30,6 +30,9 @@ let ticksUntilMoveDown = initialTicksUntilMoveDown;
 let holdPressed = false;
 let holdPiece = null;
 
+let gameOver = false;
+let paused = false;
+
 export let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
 export let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
 let nextQueueGrid = new Grid(nextQueueCanvas, 4, 17, true);
@@ -63,32 +66,45 @@ export let gameGrid = [
 let currentPiece = new generateRandomPiece()
 currentPiece.drawSelf();
 
+// let piece = currentPiece;
+// piece.shadowToGrid();
+// console.log(piece);
+// piece.drawSelf();
 
 function drawPlayfield() {
+  if (!(paused)) {
 
-  playfieldGrid.draw()
+    playfieldGrid.draw()
 
-  drawPlayFieldState();
+    drawPlayFieldState();
 
-  // let piece = new pieces.ZPiece(playfieldGrid, 3, 6, "north");
-  // piece.setOrientation('east')
-  // piece.setOrientation('south')
-  // piece.setOrientation('west')
-  // piece.drawSelf();
-  // piece.drawPieceCenter();
+    //let piece = new pieces.ZPiece(playfieldGrid, 3, 6, "north");
+    // piece.setOrientation('east')
+    // piece.setOrientation('south')
+    // piece.setOrientation('west')
+    //piece.drawSelf();
+    // piece.drawPieceCenter();
 
-  if (rightPressed) {
-    currentPiece.moveRight();
-  } if (leftPressed) {
-    currentPiece.moveLeft();
-  } if (upPressed) {
-    currentPiece.moveUp();
+    //piece.shadowToGrid();
+    //piece.drawSelf();
+
+    if (rightPressed) {
+      //piece.moveRight();
+      currentPiece.moveRight();
+    } if (leftPressed) {
+      currentPiece.moveLeft();
+    } if (upPressed) {
+      currentPiece.moveUp();
+    }
+    if (downPressed) {
+      currentPiece.moveDown();
+    }
+    currentPiece.drawSelf();
+    currentPiece.drawPieceCenter();
   }
-  if (downPressed) {
-    currentPiece.moveDown();
+  else {
+
   }
-  currentPiece.drawSelf();
-  currentPiece.drawPieceCenter();
 }
 
 
@@ -119,25 +135,23 @@ function drawShadow() {
   // TODO
 }
 
-function lineClear(){
+function lineClear() {
   let counter = 0; //note: create text display for single, double, triple, tetris using this
-  for(let i = gameGrid.length - 1; i >= 0;)
-    {
-      if(!(gameGrid[i].includes(null)))
-        {
-          //clear line
-          //move all lines above a row down
-          gameGrid.splice(i, 1);
-          gameGrid.unshift([null, null, null, null, null, null, null, null, null, null]);
-          //gameGrid[0] = [null, null, null, null, null, null, null, null, null, null];
-          counter++;
-          console.log(gameGrid);
-        } else {
-          i--;
-        }
+  for (let i = gameGrid.length - 1; i >= 0;) {
+    if (!(gameGrid[i].includes(null))) {
+      //clear line
+      //move all lines above a row down
+      gameGrid.splice(i, 1);
+      gameGrid.unshift([null, null, null, null, null, null, null, null, null, null]);
+      //gameGrid[0] = [null, null, null, null, null, null, null, null, null, null];
+      counter++;
+      console.log(gameGrid);
+    } else {
+      i--;
     }
-    totalLinesCleared += counter;
-    ticksUntilMoveDown = initialTicksUntilMoveDown - Math.round(3*totalLinesCleared/5)
+  }
+  totalLinesCleared += counter;
+  ticksUntilMoveDown = initialTicksUntilMoveDown - Math.round(3 * totalLinesCleared / 5)
 }
 
 /**
@@ -164,16 +178,25 @@ function generateRandomPiece() {
 
 function draw() {
   // ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPlayfield();
-  drawHoldArea();
-  drawNextQueue()
-  drawShadow();
+  if (!(gameOver)) {
+    drawPlayfield();
+    drawHoldArea();
+    drawNextQueue();
+    drawShadow();
 
-  ticksElapsed++;
-  if (ticksElapsed >= ticksUntilMoveDown){
-    console.log('here')
-    ticksElapsed = 0;
-    currentPiece.moveDown();
+    if (!(paused)) {
+      ticksElapsed++;
+      if (ticksElapsed >= ticksUntilMoveDown) {
+        console.log('here')
+        ticksElapsed = 0;
+        currentPiece.moveDown();
+        // if the coords of the piece are the same after the movedown
+        // set amount of ticks before automatically dropping
+      }
+    }
+    else {
+      //Text("Game Over", "Gill Sans", 100, 150, 'white');
+    }
   }
 }
 
@@ -192,18 +215,26 @@ function startGame() {
       upPressed = true;
     } else if (e.key === "Down" || e.key === "ArrowDown") {
       downPressed = true;
-    } else if (e.key === 'd') {
+    } else if (e.key === 'd' && !paused) {
       currentPiece.rotateCCW();
       drawPlayfield();
-    } else if (e.key === 'f') {
+    } else if (e.key === 'f' && !paused) {
       currentPiece.rotateCW();
       drawPlayfield();
-    } else if (e.key === ' ') {
+    } else if (e.key === 'p') {
+      paused = paused ? false : true;
+    } else if (e.key === ' ' && !paused) {
       currentPiece.hardDrop();
       lineClear();
-      currentPiece = generateRandomPiece(); // should generate new piece randomly
-      holdPressed = false;
-    } else if (e.key === 'Shift' && !holdPressed) {
+      //check if piece would spawn where a block already is (above visible game grid)
+      if (gameGrid[2][5] !== null || gameGrid[2][6] !== null || gameGrid[2][7] !== null) {
+        gameOver = true;
+      }
+      else {
+        currentPiece = generateRandomPiece(); // should generate new piece randomly
+        holdPressed = false;
+      }
+    } else if (e.key === 'Shift' && !holdPressed && !paused) {
       holdPressed = true;
       if (holdPiece !== null) { //if hold has a piece
         let tempPiece = currentPiece;
