@@ -103,8 +103,8 @@ export class Piece {
         break;
     }
 
-    console.log(`Trying to rotate ${prevOrientation} -> ${this.orientation}`)
-    console.log(`kickIndex: ${kickIndex}`)
+    // console.log(`Trying to rotate ${prevOrientation} -> ${this.orientation}`)
+    // console.log(`kickIndex: ${kickIndex}`)
 
     if (rotationCenter === undefined){
       // try each rotation center in kick table
@@ -114,7 +114,7 @@ export class Piece {
 
         if(!this.checkForCollision()){
           // no collision
-          console.log(`Rotated with center ${i}`)
+          // console.log(`Rotated with center ${i}`)
           return i;
         }
       }
@@ -130,7 +130,7 @@ export class Piece {
       }
     }
 
-    console.log('failed to rotate')
+    // console.log('failed to rotate')
 
     // failed to rotate. Recover previous state
     this.centerX = startingX;
@@ -169,8 +169,8 @@ export class Piece {
         break;
     }
 
-    console.log(`Trying to rotate ${prevOrientation} -> ${this.orientation}`)
-    console.log(`kickIndex: ${kickIndex}`)
+    // console.log(`Trying to rotate ${prevOrientation} -> ${this.orientation}`)
+    // console.log(`kickIndex: ${kickIndex}`)
 
     if (rotationCenter === undefined){
       // try each rotation center in kick table
@@ -180,7 +180,7 @@ export class Piece {
 
         if(!this.checkForCollision()){
           // no collision
-          console.log(`Rotated with center ${i}`)
+          // console.log(`Rotated with center ${i}`)
           return i;
         }
       }
@@ -196,7 +196,7 @@ export class Piece {
       }
     }
 
-    console.log('Failed to rotate')
+    // console.log('Failed to rotate')
     // failed to rotate. Recover previous state
     this.centerX = startingX;
     this.centerY = startingY;
@@ -255,9 +255,9 @@ export class Piece {
    * @returns true if collision in current position
    */
   checkForCollision() {
-    console.log(this.getGridCoords());
+    // console.log(this.getGridCoords());
     for (const [x, y] of this.getGridCoords()) {
-      console.log(x + " " + y);
+      // console.log(x + " " + y);
       if (x < 1 || x > this.grid.gridWidth || y < 1 || y > this.grid.gridHeight + 4) {
         return true;
       }

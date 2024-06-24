@@ -84,11 +84,12 @@ function drawPlayfield() {
     drawPlayFieldState();
 
     if (rightPressed) {
-      //piece.moveRight();
       currentPiece.moveRight();
-    } if (leftPressed) {
+    }
+    if (leftPressed) {
       currentPiece.moveLeft();
-    } if (upPressed) {
+    }
+    if (upPressed) {
       currentPiece.moveUp();
     }
     if (downPressed) {
@@ -138,9 +139,8 @@ function lineClear() {
       //move all lines above a row down
       gameGrid.splice(i, 1);
       gameGrid.unshift([null, null, null, null, null, null, null, null, null, null]);
-      //gameGrid[0] = [null, null, null, null, null, null, null, null, null, null];
       counter++;
-      console.log(gameGrid);
+      // console.log(gameGrid);
     } else {
       i--;
     }
@@ -172,7 +172,6 @@ function generateRandomPiece() {
 }
 
 function draw() {
-  // ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (!(gameOver)) {
     drawPlayfield();
     drawHoldArea();
@@ -183,7 +182,7 @@ function draw() {
       // logic to handle automatic movedown after timer expires & piece lock
       ticksElapsed++;
       if (ticksElapsed >= ticksUntilMoveDown) {
-        console.log('here')
+        // console.log('here')
         ticksElapsed = 0;
         let moveDownSucceeded = currentPiece.moveDown();
         if (!moveDownSucceeded) {
@@ -192,9 +191,12 @@ function draw() {
       }
     }
   }
-  else {
-    gameOverDiv.style.visibility="visible";
-  }
+}
+
+function triggerGameOver(){
+  gameOver = true;
+  gameOverDiv.style.visibility="visible";
+  console.log('Game over')
 }
 
 function lockPieceIntoGridAndContinue(){
@@ -202,7 +204,7 @@ function lockPieceIntoGridAndContinue(){
   lineClear();
   //check if piece would spawn where a block already is (above visible game grid)
   if (gameGrid[2][5] !== null || gameGrid[2][6] !== null || gameGrid[2][7] !== null) {
-    gameOver = true;
+    triggerGameOver();
   }
   else {
     currentPiece = generateRandomPiece(); // should generate new piece randomly
@@ -215,7 +217,7 @@ function startGame() {
   document.addEventListener("keyup", keyUpHandler, false);
 
   function keyDownHandler(e) {
-    console.log('Keydown: ' + e.key);
+    // console.log('Keydown: ' + e.key);
     if (gameOver){
       return
     }
@@ -257,7 +259,7 @@ function startGame() {
   }
 
   function keyUpHandler(e) {
-    console.log('Keyup: ' + e.key);
+    // console.log('Keyup: ' + e.key);
 
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = false;
@@ -272,25 +274,6 @@ function startGame() {
 
   const interval = setInterval(draw, 50);
 
-  // const gravity = setTimeout(moveCurrentPieceDown, autoDownDelay);
 }
 
-// function updateGravity (callback, totalLinesCleared){
-//   var internalCallback = function (){
-//     return function() {
-//       let newDelay = startingDelay - Math.round(totalLinesCleared*.1);
-//       window.setTimeout(internalCallback, newDelay)
-//     }
-//   }
-//   window.setTimeout(newDelay)
-// }
-
-// function moveCurrentPieceDown(){
-//   currentPiece.moveDown();
-// }
-
 startGame();
-// document.getElementById("runButton").addEventListener("click", function () {
-//   startGame();
-//   this.disabled = true;
-// });
