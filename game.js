@@ -66,27 +66,12 @@ export let gameGrid = [
 let currentPiece = new generateRandomPiece()
 currentPiece.drawSelf();
 
-// let piece = currentPiece;
-// piece.shadowToGrid();
-// console.log(piece);
-// piece.drawSelf();
-
 function drawPlayfield() {
   if (!(paused)) {
 
     playfieldGrid.draw()
 
     drawPlayFieldState();
-
-    //let piece = new pieces.ZPiece(playfieldGrid, 3, 6, "north");
-    // piece.setOrientation('east')
-    // piece.setOrientation('south')
-    // piece.setOrientation('west')
-    //piece.drawSelf();
-    // piece.drawPieceCenter();
-
-    //piece.shadowToGrid();
-    //piece.drawSelf();
 
     if (rightPressed) {
       //piece.moveRight();
@@ -185,18 +170,33 @@ function draw() {
     drawShadow();
 
     if (!(paused)) {
+      // logic to handle automatic movedown after timer expires & piece lock
       ticksElapsed++;
       if (ticksElapsed >= ticksUntilMoveDown) {
         console.log('here')
         ticksElapsed = 0;
-        currentPiece.moveDown();
-        // if the coords of the piece are the same after the movedown
-        // set amount of ticks before automatically dropping
+        let moveDownSucceeded = currentPiece.moveDown();
+        if (!moveDownSucceeded) {
+          lockPieceIntoGridAndContinue()
+        }
       }
     }
     else {
       //Text("Game Over", "Gill Sans", 100, 150, 'white');
     }
+  }
+}
+
+function lockPieceIntoGridAndContinue(){
+  currentPiece.pieceToGrid();
+  lineClear();
+  //check if piece would spawn where a block already is (above visible game grid)
+  if (gameGrid[2][5] !== null || gameGrid[2][6] !== null || gameGrid[2][7] !== null) {
+    gameOver = true;
+  }
+  else {
+    currentPiece = generateRandomPiece(); // should generate new piece randomly
+    holdPressed = false;
   }
 }
 
@@ -225,15 +225,7 @@ function startGame() {
       paused = paused ? false : true;
     } else if (e.key === ' ' && !paused) {
       currentPiece.hardDrop();
-      lineClear();
-      //check if piece would spawn where a block already is (above visible game grid)
-      if (gameGrid[2][5] !== null || gameGrid[2][6] !== null || gameGrid[2][7] !== null) {
-        gameOver = true;
-      }
-      else {
-        currentPiece = generateRandomPiece(); // should generate new piece randomly
-        holdPressed = false;
-      }
+      lockPieceIntoGridAndContinue();
     } else if (e.key === 'Shift' && !holdPressed && !paused) {
       holdPressed = true;
       if (holdPiece !== null) { //if hold has a piece

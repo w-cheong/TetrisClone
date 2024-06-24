@@ -222,11 +222,17 @@ export class Piece {
       this.centerY--;
     }
   }
+
+  /**
+   * @return boolean whether succeeded
+   */
   moveDown() {
     this.centerY--;
     if(this.checkForCollision()){
       this.centerY++;
+      return false
     }
+    return true
   }
 
   softDrop() { return null; }
@@ -235,8 +241,6 @@ export class Piece {
       this.centerY--;
     }
     this.centerY++;
-    this.pieceToGrid();
-
   }
 
   // shadowToGrid() {
@@ -264,6 +268,16 @@ export class Piece {
     return false;
   }
 
+  /**
+   * @returns boolean
+   */
+  checkIsOnSurface(){
+    this.centerY--;
+    let res = this.checkForCollision();
+    this.centerY++;
+    return res;
+  }
+
   pieceToGrid() {
     //if piece is locked down
     //stop moving piece
@@ -272,6 +286,7 @@ export class Piece {
       gameGrid[gameGrid.length - y][x - 1] = this.color;
     }
   }
+
   drawSelf() {
     let offsets = this.offsetsTable[this.orientation];
     for (const [xOffset, yOffset] of offsets) {
