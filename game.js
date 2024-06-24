@@ -27,7 +27,10 @@ let ticksElapsed = 0;
 let initialTicksUntilMoveDown = 10
 let ticksUntilMoveDown = initialTicksUntilMoveDown;
 
-let holdPressed = false;
+/**
+ * This boolean is to prevent user from swapping a piece to hold multiple times in a row.
+ */
+let holdPreviouslyUsed = false;
 let holdPiece = null;
 
 let gameOver = false;
@@ -196,7 +199,7 @@ function lockPieceIntoGridAndContinue(){
   }
   else {
     currentPiece = generateRandomPiece(); // should generate new piece randomly
-    holdPressed = false;
+    holdPreviouslyUsed = false;
   }
 }
 
@@ -225,12 +228,12 @@ function startGame() {
       currentPiece.rotateCW();
       drawPlayfield();
     } else if (e.key === 'p') {
-      paused = paused ? false : true;
+      paused = !paused;
     } else if (e.key === ' ' && !paused) {
       currentPiece.hardDrop();
       lockPieceIntoGridAndContinue();
-    } else if (e.key === 'Shift' && !holdPressed && !paused) {
-      holdPressed = true;
+    } else if (e.key === 'Shift' && !holdPreviouslyUsed && !paused) {
+      holdPreviouslyUsed = true;
       if (holdPiece !== null) { //if hold has a piece
         let tempPiece = currentPiece;
         currentPiece = holdPiece;
@@ -247,6 +250,8 @@ function startGame() {
   }
 
   function keyUpHandler(e) {
+    console.log('Keyup: ' + e.key);
+
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = false;
     } else if (e.key === "Left" || e.key === "ArrowLeft") {
