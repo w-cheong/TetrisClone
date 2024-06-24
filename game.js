@@ -12,7 +12,6 @@ const nextQueueCanvas = document.getElementById('nextQueue');
 const nextQueueCTX = nextQueueCanvas.getContext("2d");
 
 const gameOverDiv = document.getElementById('gameOverDiv');
-gameOverDiv.style.visibility="hidden";
 const gameOverDivHeight = gameOverDiv.offsetHeight;
 const gameContainer = document.getElementById('game');
 const gameContainerHeight = gameContainer.offsetHeight;
