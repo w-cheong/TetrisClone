@@ -11,6 +11,13 @@ const holdAreaCTX = holdAreaCanvas.getContext("2d");
 const nextQueueCanvas = document.getElementById('nextQueue');
 const nextQueueCTX = nextQueueCanvas.getContext("2d");
 
+const gameOverDiv = document.getElementById('gameOverDiv');
+gameOverDiv.style.visibility="hidden";
+const gameOverDivHeight = gameOverDiv.offsetHeight;
+const gameContainer = document.getElementById('game');
+const gameContainerHeight = gameContainer.offsetHeight;
+
+gameOverDiv.style.top = `${gameContainerHeight/2 - gameOverDivHeight/2}px`
 
 let rightPressed = false;
 let leftPressed = false;
@@ -184,9 +191,9 @@ function draw() {
         }
       }
     }
-    else {
-      //Text("Game Over", "Gill Sans", 100, 150, 'white');
-    }
+  }
+  else {
+    gameOverDiv.style.visibility="visible";
   }
 }
 
