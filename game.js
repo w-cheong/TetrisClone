@@ -16,7 +16,7 @@ const gameOverDivHeight = gameOverDiv.offsetHeight;
 const gameContainer = document.getElementById('game');
 const gameContainerHeight = gameContainer.offsetHeight;
 
-gameOverDiv.style.top = `${gameContainerHeight/2 - gameOverDivHeight/2}px`
+gameOverDiv.style.top = `${gameContainerHeight / 2 - gameOverDivHeight / 2}px`
 
 let rightPressed = false;
 let leftPressed = false;
@@ -44,7 +44,7 @@ let paused = false;
 
 export let playfieldGrid = new Grid(playfieldCanvas, 10, 20, true);
 export let holdAreaGrid = new Grid(holdAreaCanvas, 4, 4, true);
-let nextQueueGrid = new Grid(nextQueueCanvas, 4, 17, true);
+export let nextQueueGrid = new Grid(nextQueueCanvas, 4, 17, true);
 
 export let gameGrid = [
   [null, null, null, null, null, null, null, null, null, null], // 23
@@ -74,6 +74,23 @@ export let gameGrid = [
 
 let currentPiece = new generateRandomPiece()
 currentPiece.drawSelf();
+//there has to be a better way to set up queue than this... 
+//but this is just for making it work
+let queuePiece1 = new generateRandomPiece()
+let queuePiece2 = new generateRandomPiece()
+let queuePiece3 = new generateRandomPiece()
+let queuePiece4 = new generateRandomPiece()
+let queuePiece5 = new generateRandomPiece()
+queuePiece1.moveQueuePiece1ToNextQueueGrid();
+queuePiece2.moveQueuePiece2ToNextQueueGrid();
+queuePiece3.moveQueuePiece3ToNextQueueGrid();
+queuePiece4.moveQueuePiece4ToNextQueueGrid();
+queuePiece5.moveQueuePiece5ToNextQueueGrid();
+queuePiece1.drawSelf();
+queuePiece2.drawSelf();
+queuePiece3.drawSelf();
+queuePiece4.drawSelf();
+queuePiece5.drawSelf();
 
 function drawPlayfield() {
   if (!(paused)) {
@@ -124,10 +141,32 @@ function drawHoldArea() {
 function drawNextQueue() {
   // TODO
   nextQueueGrid.draw();
+  queuePiece1.drawSelf();
+  queuePiece2.drawSelf();
+  queuePiece3.drawSelf();
+  queuePiece4.drawSelf();
+  queuePiece5.drawSelf();
 }
 
 function drawShadow() {
   // TODO
+}
+
+/**
+ *  @returns changes to nextQueue when a piece needs to move out of nextQueue
+ */
+function nextQueueChanges() {
+  currentPiece = queuePiece1;
+  queuePiece1 = queuePiece2;
+  queuePiece2 = queuePiece3;
+  queuePiece3 = queuePiece4;
+  queuePiece4 = queuePiece5;
+  queuePiece5 = generateRandomPiece();
+  queuePiece1.moveQueuePiece1ToNextQueueGrid();
+  queuePiece2.moveQueuePiece2ToNextQueueGrid();
+  queuePiece3.moveQueuePiece3ToNextQueueGrid();
+  queuePiece4.moveQueuePiece4ToNextQueueGrid();
+  queuePiece5.moveQueuePiece5ToNextQueueGrid();
 }
 
 function lineClear() {
@@ -192,13 +231,13 @@ function draw() {
   }
 }
 
-function triggerGameOver(){
+function triggerGameOver() {
   gameOver = true;
-  gameOverDiv.style.visibility="visible";
+  gameOverDiv.style.visibility = "visible";
   console.log('Game over')
 }
 
-function lockPieceIntoGridAndContinue(){
+function lockPieceIntoGridAndContinue() {
   currentPiece.pieceToGrid();
   lineClear();
   //check if piece would spawn where a block already is (above visible game grid)
@@ -206,8 +245,11 @@ function lockPieceIntoGridAndContinue(){
     triggerGameOver();
   }
   else {
-    currentPiece = generateRandomPiece(); // should generate new piece randomly
+    //adjust the nextQueue
+    nextQueueChanges();
+    drawNextQueue();
     holdPreviouslyUsed = false;
+    currentPiece.moveToPlayfieldGrid();
   }
 }
 
@@ -217,7 +259,7 @@ function startGame() {
 
   function keyDownHandler(e) {
     // console.log('Keydown: ' + e.key);
-    if (gameOver){
+    if (gameOver) {
       return
     }
 
@@ -248,7 +290,9 @@ function startGame() {
         holdPiece = tempPiece;
       } else { //if hold has no piece
         holdPiece = currentPiece;
-        currentPiece = generateRandomPiece(); //must change for hold bar
+        nextQueueChanges();
+        drawNextQueue();
+        //currentPiece = generateRandomPiece(); //must change for hold bar
       }
       holdPiece.moveToHoldGrid();
       holdPiece.drawSelf(); //need to show something

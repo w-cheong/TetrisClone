@@ -1,5 +1,5 @@
 import { Grid } from "./grid.js";
-import { gameGrid, playfieldGrid, holdAreaGrid } from "./game.js";
+import { gameGrid, playfieldGrid, holdAreaGrid, nextQueueGrid } from "./game.js";
 
 export class Piece {
 
@@ -66,6 +66,41 @@ export class Piece {
 
   moveToHoldGrid(){
     this.grid = holdAreaGrid;
+    this.orientation = 'north';
+    this.centerX = 2;
+    this.centerY = 2;
+  }
+
+  moveQueuePiece1ToNextQueueGrid() {
+    this.grid = nextQueueGrid;
+    this.orientation = 'north';
+    this.centerX = 2;
+    this.centerY = 14;
+  }
+
+  moveQueuePiece2ToNextQueueGrid() {
+    this.grid = nextQueueGrid;
+    this.orientation = 'north';
+    this.centerX = 2;
+    this.centerY = 11;
+  }
+
+  moveQueuePiece3ToNextQueueGrid() {
+    this.grid = nextQueueGrid;
+    this.orientation = 'north';
+    this.centerX = 2;
+    this.centerY = 8;
+  }
+
+  moveQueuePiece4ToNextQueueGrid() {
+    this.grid = nextQueueGrid;
+    this.orientation = 'north';
+    this.centerX = 2;
+    this.centerY = 5;
+  }
+
+  moveQueuePiece5ToNextQueueGrid() {
+    this.grid = nextQueueGrid;
     this.orientation = 'north';
     this.centerX = 2;
     this.centerY = 2;

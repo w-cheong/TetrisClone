@@ -45,9 +45,10 @@ Then every refresh tick, redraw playfield using the `drawGridPiece()` function.
 * [X] Add rotation of pieces (with kick table)
   * [ ] Check accuracy of rotation of pieces (with kick table)
 * [X] Add gravity of pieces
-* [ ] Add game over condition (Pieces stop dropping after certain conditions)
+* [X] Add game over condition (Pieces stop dropping after block out)
+  * [ ] Additional game over condition - lock out (entire piece drops above playzone)
 * [X] Add hold function
-* [ ] Add next queue pieces
+* [X] Add next queue pieces
 * [ ] Textbar for controls (cosmetic)
   * [ ] Customizable keyboard binding???
   * [ ] Audio (Sound effects, background music)
