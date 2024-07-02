@@ -252,74 +252,74 @@ function lockPieceIntoGridAndContinue() {
   }
 }
 
+function keyDownHandler(e) {
+  // console.log('Keydown: ' + e.key);
+  if (gameOver) {
+    return
+  }
+  if (e.key === 'p'){
+    paused = !paused;
+  }
+
+  if (paused){
+    return;
+  }
+
+  if (e.key === "Right" || e.key === "ArrowRight") {
+    rightPressed = true;
+  } else if (e.key === "Left" || e.key === "ArrowLeft") {
+    leftPressed = true;
+  } else if (e.key === "Up" || e.key === "ArrowUp") {
+    upPressed = true;
+  } else if (e.key === "Down" || e.key === "ArrowDown") {
+    downPressed = true;
+  } else if (e.key === 'd' ) {
+    currentPiece.rotateCCW();
+    drawPlayfield();
+  } else if (e.key === 'f') {
+    currentPiece.rotateCW();
+    drawPlayfield();
+  } else if (e.key === ' ') {
+    currentPiece.hardDrop();
+    lockPieceIntoGridAndContinue();
+  } else if (e.key === 'Shift' && !holdPreviouslyUsed) {
+    holdPreviouslyUsed = true;
+    if (holdPiece !== null) { //if hold has a piece
+      let tempPiece = currentPiece;
+      currentPiece = holdPiece;
+      holdPiece = tempPiece;
+    } else { //if hold has no piece
+      holdPiece = currentPiece;
+      updateQueue();
+      drawNextQueue();
+      //currentPiece = generateRandomPiece(); //must change for hold bar
+    }
+    holdPiece.moveToHoldGrid();
+    holdPiece.drawSelf(); //need to show something
+    currentPiece.moveToPlayfieldGrid();
+    currentPiece.drawSelf();
+  }
+}
+
+function keyUpHandler(e) {
+  // console.log('Keyup: ' + e.key);
+
+  if (e.key === "Right" || e.key === "ArrowRight") {
+    rightPressed = false;
+  } else if (e.key === "Left" || e.key === "ArrowLeft") {
+    leftPressed = false;
+  } else if (e.key === "Up" || e.key === "ArrowUp") {
+    upPressed = false;
+  } else if (e.key === "Down" || e.key === "ArrowDown") {
+    downPressed = false;
+  }
+}
+
 function startGame() {
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
 
-  function keyDownHandler(e) {
-    // console.log('Keydown: ' + e.key);
-    if (gameOver) {
-      return
-    }
-    if (e.key === 'p'){
-      paused = !paused;
-    }
-
-    if (paused){
-      return;
-    }
-
-    if (e.key === "Right" || e.key === "ArrowRight") {
-      rightPressed = true;
-    } else if (e.key === "Left" || e.key === "ArrowLeft") {
-      leftPressed = true;
-    } else if (e.key === "Up" || e.key === "ArrowUp") {
-      upPressed = true;
-    } else if (e.key === "Down" || e.key === "ArrowDown") {
-      downPressed = true;
-    } else if (e.key === 'd' ) {
-      currentPiece.rotateCCW();
-      drawPlayfield();
-    } else if (e.key === 'f') {
-      currentPiece.rotateCW();
-      drawPlayfield();
-    } else if (e.key === ' ') {
-      currentPiece.hardDrop();
-      lockPieceIntoGridAndContinue();
-    } else if (e.key === 'Shift' && !holdPreviouslyUsed) {
-      holdPreviouslyUsed = true;
-      if (holdPiece !== null) { //if hold has a piece
-        let tempPiece = currentPiece;
-        currentPiece = holdPiece;
-        holdPiece = tempPiece;
-      } else { //if hold has no piece
-        holdPiece = currentPiece;
-        updateQueue();
-        drawNextQueue();
-        //currentPiece = generateRandomPiece(); //must change for hold bar
-      }
-      holdPiece.moveToHoldGrid();
-      holdPiece.drawSelf(); //need to show something
-      currentPiece.moveToPlayfieldGrid();
-      currentPiece.drawSelf();
-    }
-  }
-
-  function keyUpHandler(e) {
-    // console.log('Keyup: ' + e.key);
-
-    if (e.key === "Right" || e.key === "ArrowRight") {
-      rightPressed = false;
-    } else if (e.key === "Left" || e.key === "ArrowLeft") {
-      leftPressed = false;
-    } else if (e.key === "Up" || e.key === "ArrowUp") {
-      upPressed = false;
-    } else if (e.key === "Down" || e.key === "ArrowDown") {
-      downPressed = false;
-    }
-  }
-
-  const interval = setInterval(draw, 50);
+  setInterval(draw, 50);
 
 }
 
