@@ -36,6 +36,17 @@ let initialTicksUntilMoveDown = 10
 let ticksUntilMoveDown = initialTicksUntilMoveDown;
 
 /**
+ * For toggling things related to debugging the rotation
+ */
+const DEBUG_ROTATION = false;
+
+/**
+ * For toggling auto-move-down "gravity"
+ */
+const GRAVITY = true;
+
+
+/**
  * This boolean is to prevent user from swapping a piece to hold multiple times in a row.
  */
 let holdPreviouslyUsed = false;
@@ -126,7 +137,9 @@ function drawPlayfield() {
   updatePiecePosition();
 
   currentPiece.drawSelf();
-  currentPiece.drawPieceCenter(); // for debugging, remove eventually
+  if (DEBUG_ROTATION) {
+    currentPiece.drawPieceCenter(); // for debugging, remove eventually
+  }
 }
 
 
@@ -222,11 +235,12 @@ function generateRandomPiece() {
 function draw() {
   if (paused || gameOver) return;
 
-    drawPlayfield();
-    drawHoldArea();
-    drawNextQueue();
-    drawShadow();
+  drawPlayfield();
+  drawHoldArea();
+  drawNextQueue();
+  drawShadow();
 
+  if (GRAVITY) {
     // logic to handle automatic movedown after timer expires & piece lock
     ticksElapsed++;
     if (ticksElapsed >= ticksUntilMoveDown) {
@@ -237,6 +251,7 @@ function draw() {
         lockPieceIntoGridAndContinue()
       }
     }
+  }
 }
 
 function triggerGameOver() {
