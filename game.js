@@ -30,10 +30,39 @@ let downPressed = false;
 
 let totalLinesCleared = 0;
 
+/**
+ * Global game tick.
+ * For overall timing of things.
+ * Increments on every refresh.
+ */
+let gameTick = 0;
+
+/**
+ * When to check for held keys. Updates based on last key pressed (to allow for delay before repeating)
+ */
+let tickToRepeatHeldKey = -1;
+
+/**
+ * How long to wait before starting to repeat movement
+ */
+const INITIAL_HELD_KEY_CHECK_DELAY = 14;
+
+/**
+ * How many ticks to wait between key replays
+ */
+const HELD_KEY_DELAY = 4;
+
+/**
+ * Used to auto-drop piece
+ */
 let ticksElapsed = 0;
 
-let initialTicksUntilMoveDown = 10
-let ticksUntilMoveDown = initialTicksUntilMoveDown;
+/**
+ * Starting drop delay speed
+ */
+const INITIAL_TICKS_TILL_MOVE_DOWN = 30;
+
+let ticksUntilMoveDown = INITIAL_TICKS_TILL_MOVE_DOWN;
 
 /**
  * For toggling things related to debugging the rotation
@@ -108,21 +137,38 @@ function populateQueue() {
 }
 
 /**
- * Update every game tick (key being held down)
+ * Refires movement being held down, with correct delay.
+ *
+ * Called by redraw
  */
-function updatePiecePosition() {
-  if (rightPressed) {
-    currentPiece.moveRight();
-  }
-  if (leftPressed) {
-    currentPiece.moveLeft();
-  }
+// function updatePiecePosition() {
+function handleHeldMovement() {
+  // up and down use older update approach (on refresh)
+
   if (upPressed) {
     currentPiece.moveUp();
+    console.log('Refiring Up')
   }
   if (downPressed) {
     currentPiece.moveDown();
+    console.log('Refiring Down')
   }
+
+  // left and right use update based on timing
+  if (gameTick < tickToRepeatHeldKey)
+    return;
+
+  if (rightPressed) {
+    console.log('Refiring Right')
+    currentPiece.moveRight();
+  }
+  if (leftPressed) {
+    console.log('Refiring Left')
+    currentPiece.moveLeft();
+  }
+
+  // update to prevent repeat from occurring too quickly.
+  tickToRepeatHeldKey = gameTick + HELD_KEY_DELAY;
 }
 
 
@@ -134,8 +180,9 @@ function drawPlayfield() {
 
   drawPlayFieldState();
 
-  updatePiecePosition();
   drawShadow();
+  // updatePiecePosition();
+
   currentPiece.drawSelf();
 
   if (DEBUG_ROTATION) {
@@ -191,7 +238,6 @@ function updateQueue() {
   for (let i = 0; i < 5; i++) {
     queue[i].moveQueuePieceToNextQueueGrid(i);
   }
-
 }
 
 function lineClear() {
@@ -208,7 +254,7 @@ function lineClear() {
     }
   }
   totalLinesCleared += counter;
-  ticksUntilMoveDown = initialTicksUntilMoveDown - Math.round(3 * totalLinesCleared / 5)
+  ticksUntilMoveDown = INITIAL_TICKS_TILL_MOVE_DOWN - Math.round(3 * totalLinesCleared / 5)
 }
 
 /**
@@ -237,10 +283,14 @@ function draw() {
   if (paused || gameOver) return;
 
   if (GRAVITY) {
+    gameTick++;
+    // console.log(gameTick);
+
     // logic to handle automatic movedown after timer expires & piece lock
+    gameTick++;
+
     ticksElapsed++;
     if (ticksElapsed >= ticksUntilMoveDown) {
-      // console.log('here')
       ticksElapsed = 0;
       let moveDownSucceeded = currentPiece.moveDown();
       if (!moveDownSucceeded) {
@@ -249,6 +299,7 @@ function draw() {
     }
   }
 
+  handleHeldMovement();
   drawPlayfield();
   drawHoldArea();
   drawNextQueue();
@@ -284,10 +335,12 @@ function resetGame(){
 
   totalLinesCleared = 0;
 
+  gameTick = 0;
+  tickToRepeatHeldKey = -1;
+
   ticksElapsed = 0;
 
-  initialTicksUntilMoveDown = 10
-  ticksUntilMoveDown = initialTicksUntilMoveDown;
+  ticksUntilMoveDown = INITIAL_TICKS_TILL_MOVE_DOWN
 
   holdPreviouslyUsed = false;
   holdPiece = null;
@@ -312,7 +365,34 @@ function resetGame(){
 
   gameOver = false;
   paused = false;
+}
 
+/**
+ * For handling movement with delay properly.
+ * Set relevant variables
+ */
+function handleMovementDelay(keypress) {
+
+  if (keypress === 'left') {
+    if (leftPressed) {
+      // console.log('left OS repeat ignored');
+      return;
+    }
+    currentPiece.moveLeft();
+    leftPressed = true;
+  }
+  if (keypress === 'right') {
+    if (rightPressed) {
+      // console.log('right OS repeat ignored')
+      return;
+    }
+    currentPiece.moveRight();
+    rightPressed = true;
+  }
+
+  drawPlayfield();
+  tickToRepeatHeldKey = gameTick + INITIAL_HELD_KEY_CHECK_DELAY;
+  console.log(`tickToRepeatHeldKey = ${tickToRepeatHeldKey}`)
 }
 
 function keyDownHandler(e) {
@@ -323,23 +403,27 @@ function keyDownHandler(e) {
     }
     return
   }
-  if (e.key === 'p'){
+  if (e.key === 'p') {
     paused = !paused;
   }
 
-  if (paused){
+  if (paused) {
     return;
   }
 
   if (e.key === "Right" || e.key === "ArrowRight") {
-    rightPressed = true;
+    handleMovementDelay("right");
   } else if (e.key === "Left" || e.key === "ArrowLeft") {
-    leftPressed = true;
+    handleMovementDelay("left");
   } else if (e.key === "Up" || e.key === "ArrowUp") {
     upPressed = true;
+    currentPiece.moveUp();
+    // handleMovementDelay('up');
   } else if (e.key === "Down" || e.key === "ArrowDown") {
     downPressed = true;
-  } else if (e.key === 'd' ) {
+    currentPiece.moveDown();
+    // handleMovementDelay('down');
+  } else if (e.key === 'd') {
     currentPiece.rotateCCW();
     drawPlayfield();
   } else if (e.key === 'f') {
@@ -387,7 +471,8 @@ function startGame() {
   resetBtn.addEventListener('click', resetGame);
   resetBtn.addEventListener('keydown', resetGame);
 
-  setInterval(draw, 50);
+  setInterval(draw, 16.66);  // 60 fps = 16.66 ms delay
+
 }
 
 startGame();
