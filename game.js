@@ -238,6 +238,7 @@ function triggerGameOver() {
 function lockPieceIntoGridAndContinue() {
   currentPiece.pieceToGrid();
   lineClear();
+  draw();
   //check if piece would spawn where a block already is (above visible game grid)
   if (gameGrid[2][5] !== null || gameGrid[2][6] !== null || gameGrid[2][7] !== null) {
     triggerGameOver();
