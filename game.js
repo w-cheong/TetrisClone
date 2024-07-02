@@ -235,11 +235,6 @@ function generateRandomPiece() {
 function draw() {
   if (paused || gameOver) return;
 
-  drawPlayfield();
-  drawHoldArea();
-  drawNextQueue();
-  drawShadow();
-
   if (GRAVITY) {
     // logic to handle automatic movedown after timer expires & piece lock
     ticksElapsed++;
@@ -252,6 +247,11 @@ function draw() {
       }
     }
   }
+
+  drawPlayfield();
+  drawHoldArea();
+  drawNextQueue();
+  drawShadow();
 }
 
 function triggerGameOver() {
