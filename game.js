@@ -16,6 +16,8 @@ const gameOverDivHeight = gameOverDiv.offsetHeight;
 const gameContainer = document.getElementById('game');
 const gameContainerHeight = gameContainer.offsetHeight;
 
+const resetBtn = document.getElementById('resetBtn');
+
 gameOverDiv.style.top = `${gameContainerHeight / 2 - gameOverDivHeight / 2}px`
 
 let rightPressed = false;
@@ -80,10 +82,18 @@ currentPiece.drawSelf();
  * @param {Piece[]} queue
  */
 let queue = [];
+populateQueue();
 
-for (let i = 0; i < 5; i++) {
-  queue.push(new generateRandomPiece());
-  queue[i].moveQueuePieceToNextQueueGrid(i);
+/**
+ * Populate the queue from scratch.
+ * Adds five elements.
+ */
+function populateQueue() {
+  // initializes next queue
+  for (let i = 0; i < 5; i++) {
+    queue.push(new generateRandomPiece());
+    queue[i].moveQueuePieceToNextQueueGrid(i);
+  }
 }
 
 /**
@@ -252,6 +262,46 @@ function lockPieceIntoGridAndContinue() {
   }
 }
 
+/**
+ * Executed on click to reset game.
+ * Setting things up for new game.
+ */
+function resetGame(){
+  console.log('got here');
+
+  totalLinesCleared = 0;
+
+  ticksElapsed = 0;
+
+  initialTicksUntilMoveDown = 10
+  ticksUntilMoveDown = initialTicksUntilMoveDown;
+
+  holdPreviouslyUsed = false;
+  holdPiece = null;
+
+
+  // reset gameGrid
+  for (let i = 0; i < 23; i++) {
+    for (let j = 0; j < 10; j++) {
+      gameGrid[i][j] = null;
+    }
+  }
+
+  currentPiece = new generateRandomPiece()
+  currentPiece.drawSelf();
+
+  // reset next queue
+  queue = [];
+
+  populateQueue();
+
+  gameOverDiv.style.visibility = "hidden";
+
+  gameOver = false;
+  paused = false;
+
+}
+
 function keyDownHandler(e) {
   // console.log('Keydown: ' + e.key);
   if (gameOver) {
@@ -318,9 +368,9 @@ function keyUpHandler(e) {
 function startGame() {
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
+  resetBtn.addEventListener('click', resetGame);
 
   setInterval(draw, 50);
-
 }
 
 startGame();
