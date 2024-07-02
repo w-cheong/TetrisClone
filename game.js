@@ -267,7 +267,6 @@ function lockPieceIntoGridAndContinue() {
  * Setting things up for new game.
  */
 function resetGame(){
-  console.log('got here');
 
   totalLinesCleared = 0;
 
@@ -305,6 +304,9 @@ function resetGame(){
 function keyDownHandler(e) {
   // console.log('Keydown: ' + e.key);
   if (gameOver) {
+    if (e.key === 'r'){
+      resetGame();
+    }
     return
   }
   if (e.key === 'p'){
@@ -369,6 +371,7 @@ function startGame() {
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
   resetBtn.addEventListener('click', resetGame);
+  resetBtn.addEventListener('keydown', resetGame);
 
   setInterval(draw, 50);
 }
