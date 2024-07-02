@@ -74,52 +74,55 @@ export let gameGrid = [
 
 let currentPiece = new generateRandomPiece()
 currentPiece.drawSelf();
-//there has to be a better way to set up queue than this... 
-//but this is just for making it work
-let queuePiece1 = new generateRandomPiece()
-let queuePiece2 = new generateRandomPiece()
-let queuePiece3 = new generateRandomPiece()
-let queuePiece4 = new generateRandomPiece()
-let queuePiece5 = new generateRandomPiece()
-queuePiece1.moveQueuePiece1ToNextQueueGrid();
-queuePiece2.moveQueuePiece2ToNextQueueGrid();
-queuePiece3.moveQueuePiece3ToNextQueueGrid();
-queuePiece4.moveQueuePiece4ToNextQueueGrid();
-queuePiece5.moveQueuePiece5ToNextQueueGrid();
-queuePiece1.drawSelf();
-queuePiece2.drawSelf();
-queuePiece3.drawSelf();
-queuePiece4.drawSelf();
-queuePiece5.drawSelf();
 
-function drawPlayfield() {
-  if (!(paused)) {
+/**
+ * Queue containing the next few pieces
+ * @param {Piece[]} queue
+ */
+let queue = [];
 
-    playfieldGrid.draw()
+for (let i = 0; i < 5; i++) {
+  queue.push(new generateRandomPiece());
+  queue[i].moveQueuePieceToNextQueueGrid(i);
+}
 
-    drawPlayFieldState();
-
-    if (rightPressed) {
-      currentPiece.moveRight();
-    }
-    if (leftPressed) {
-      currentPiece.moveLeft();
-    }
-    if (upPressed) {
-      currentPiece.moveUp();
-    }
-    if (downPressed) {
-      currentPiece.moveDown();
-    }
-    currentPiece.drawSelf();
-    currentPiece.drawPieceCenter();
+/**
+ * Update every game tick (key being held down)
+ */
+function updatePiecePosition() {
+  if (rightPressed) {
+    currentPiece.moveRight();
   }
-  else {
-
+  if (leftPressed) {
+    currentPiece.moveLeft();
+  }
+  if (upPressed) {
+    currentPiece.moveUp();
+  }
+  if (downPressed) {
+    currentPiece.moveDown();
   }
 }
 
 
+function drawPlayfield() {
+  if (paused)  //  shouldn't update if paused
+    return;
+
+  playfieldGrid.draw();
+
+  drawPlayFieldState();
+
+  updatePiecePosition();
+
+  currentPiece.drawSelf();
+  currentPiece.drawPieceCenter(); // for debugging, remove eventually
+}
+
+
+/**
+ * Draws the pieces stored in `gameGrid`
+ */
 function drawPlayFieldState() {
   //check array for if the position on the playfield should be filled
   //if filled call drawGridPiece() to fill the color in.
@@ -138,14 +141,14 @@ function drawHoldArea() {
   holdPiece?.drawSelf();
 }
 
+/**
+ * Draw the queue
+ */
 function drawNextQueue() {
-  // TODO
   nextQueueGrid.draw();
-  queuePiece1.drawSelf();
-  queuePiece2.drawSelf();
-  queuePiece3.drawSelf();
-  queuePiece4.drawSelf();
-  queuePiece5.drawSelf();
+  for (const piece of queue) {
+    piece.drawSelf();
+  }
 }
 
 function drawShadow() {
@@ -153,24 +156,22 @@ function drawShadow() {
 }
 
 /**
- *  @returns changes to nextQueue when a piece needs to move out of nextQueue
+ * Update queue when piece moves out of queue.
  */
-function nextQueueChanges() {
-  currentPiece = queuePiece1;
-  queuePiece1 = queuePiece2;
-  queuePiece2 = queuePiece3;
-  queuePiece3 = queuePiece4;
-  queuePiece4 = queuePiece5;
-  queuePiece5 = generateRandomPiece();
-  queuePiece1.moveQueuePiece1ToNextQueueGrid();
-  queuePiece2.moveQueuePiece2ToNextQueueGrid();
-  queuePiece3.moveQueuePiece3ToNextQueueGrid();
-  queuePiece4.moveQueuePiece4ToNextQueueGrid();
-  queuePiece5.moveQueuePiece5ToNextQueueGrid();
+function updateQueue() {
+  currentPiece = queue.shift();
+  currentPiece.moveToPlayfieldGrid();
+  queue.push(generateRandomPiece());
+
+  // update positions of all pieces in queue
+  for (let i = 0; i < 5; i++) {
+    queue[i].moveQueuePieceToNextQueueGrid(i);
+  }
+
 }
 
 function lineClear() {
-  let counter = 0; //note: create text display for single, double, triple, tetris using this
+  let counter = 0;
   for (let i = gameGrid.length - 1; i >= 0;) {
     if (!(gameGrid[i].includes(null))) {
       //clear line
@@ -178,7 +179,6 @@ function lineClear() {
       gameGrid.splice(i, 1);
       gameGrid.unshift([null, null, null, null, null, null, null, null, null, null]);
       counter++;
-      // console.log(gameGrid);
     } else {
       i--;
     }
@@ -210,25 +210,23 @@ function generateRandomPiece() {
 }
 
 function draw() {
-  if (!(gameOver)) {
+  if (paused || gameOver) return;
+
     drawPlayfield();
     drawHoldArea();
     drawNextQueue();
     drawShadow();
 
-    if (!(paused)) {
-      // logic to handle automatic movedown after timer expires & piece lock
-      ticksElapsed++;
-      if (ticksElapsed >= ticksUntilMoveDown) {
-        // console.log('here')
-        ticksElapsed = 0;
-        let moveDownSucceeded = currentPiece.moveDown();
-        if (!moveDownSucceeded) {
-          lockPieceIntoGridAndContinue()
-        }
+    // logic to handle automatic movedown after timer expires & piece lock
+    ticksElapsed++;
+    if (ticksElapsed >= ticksUntilMoveDown) {
+      // console.log('here')
+      ticksElapsed = 0;
+      let moveDownSucceeded = currentPiece.moveDown();
+      if (!moveDownSucceeded) {
+        lockPieceIntoGridAndContinue()
       }
     }
-  }
 }
 
 function triggerGameOver() {
@@ -246,7 +244,7 @@ function lockPieceIntoGridAndContinue() {
   }
   else {
     //adjust the nextQueue
-    nextQueueChanges();
+    updateQueue();
     drawNextQueue();
     holdPreviouslyUsed = false;
     currentPiece.moveToPlayfieldGrid();
@@ -262,6 +260,13 @@ function startGame() {
     if (gameOver) {
       return
     }
+    if (e.key === 'p'){
+      paused = !paused;
+    }
+
+    if (paused){
+      return;
+    }
 
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = true;
@@ -271,18 +276,16 @@ function startGame() {
       upPressed = true;
     } else if (e.key === "Down" || e.key === "ArrowDown") {
       downPressed = true;
-    } else if (e.key === 'd' && !paused) {
+    } else if (e.key === 'd' ) {
       currentPiece.rotateCCW();
       drawPlayfield();
-    } else if (e.key === 'f' && !paused) {
+    } else if (e.key === 'f') {
       currentPiece.rotateCW();
       drawPlayfield();
-    } else if (e.key === 'p') {
-      paused = !paused;
-    } else if (e.key === ' ' && !paused) {
+    } else if (e.key === ' ') {
       currentPiece.hardDrop();
       lockPieceIntoGridAndContinue();
-    } else if (e.key === 'Shift' && !holdPreviouslyUsed && !paused) {
+    } else if (e.key === 'Shift' && !holdPreviouslyUsed) {
       holdPreviouslyUsed = true;
       if (holdPiece !== null) { //if hold has a piece
         let tempPiece = currentPiece;
@@ -290,7 +293,7 @@ function startGame() {
         holdPiece = tempPiece;
       } else { //if hold has no piece
         holdPiece = currentPiece;
-        nextQueueChanges();
+        updateQueue();
         drawNextQueue();
         //currentPiece = generateRandomPiece(); //must change for hold bar
       }

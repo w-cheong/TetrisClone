@@ -71,39 +71,17 @@ export class Piece {
     this.centerY = 2;
   }
 
-  moveQueuePiece1ToNextQueueGrid() {
-    this.grid = nextQueueGrid;
-    this.orientation = 'north';
-    this.centerX = 2;
-    this.centerY = 14;
-  }
+  /**
+   * Modifies the position of piece to align with drawing it onto the nextQueue canvas.
+   * @param {number} positionInQueue (from 0 to 4)
+   */
+  moveQueuePieceToNextQueueGrid(positionInQueue){
+    let positionToCenterY = [14, 11, 8, 5, 2];
 
-  moveQueuePiece2ToNextQueueGrid() {
     this.grid = nextQueueGrid;
     this.orientation = 'north';
     this.centerX = 2;
-    this.centerY = 11;
-  }
-
-  moveQueuePiece3ToNextQueueGrid() {
-    this.grid = nextQueueGrid;
-    this.orientation = 'north';
-    this.centerX = 2;
-    this.centerY = 8;
-  }
-
-  moveQueuePiece4ToNextQueueGrid() {
-    this.grid = nextQueueGrid;
-    this.orientation = 'north';
-    this.centerX = 2;
-    this.centerY = 5;
-  }
-
-  moveQueuePiece5ToNextQueueGrid() {
-    this.grid = nextQueueGrid;
-    this.orientation = 'north';
-    this.centerX = 2;
-    this.centerY = 2;
+    this.centerY = positionToCenterY[positionInQueue];
   }
 
   /**
