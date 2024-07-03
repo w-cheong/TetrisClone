@@ -285,22 +285,49 @@ function generateRandomPiece() {
   }
 }
 
+/**
+ * Amount to wait before locking piece
+ */
+const LOCK_DELAY = 20;
+
+let tickToLockPiece = -1;
+
+
 function draw() {
   if (paused || gameOver) return;
 
   gameTick++;
 
   if (GRAVITY) {
-    // console.log(gameTick);
 
     // logic to handle automatic movedown after timer expires & piece lock
 
     ticksElapsed++;
+
+    // console.log("gameTick: " + gameTick)
+    // console.log("tickToLockPiece: " + tickToLockPiece)
+
+    if (tickToLockPiece !== -1 && gameTick >= tickToLockPiece) {
+      //try movedown again
+      let moveDownSucceeded = currentPiece.moveDown();
+      if (!moveDownSucceeded) {
+        // console.log('locking')
+        lockPieceIntoGridAndContinue();
+        tickToLockPiece = -1;
+      } else {
+        // move down succeeded, reset lock down timer
+        tickToLockPiece = gameTick + LOCK_DELAY;
+      }
+
+    }
+
     if (ticksElapsed >= ticksUntilMoveDown) {
       ticksElapsed = 0;
       let moveDownSucceeded = currentPiece.moveDown();
-      if (!moveDownSucceeded) {
-        lockPieceIntoGridAndContinue()
+      if (!moveDownSucceeded && tickToLockPiece === -1) {
+        // piece has hit a surface, should begin countdown for locking piece down
+        tickToLockPiece = gameTick + LOCK_DELAY;
+
       }
     }
   }
