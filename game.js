@@ -135,8 +135,9 @@ function drawPlayfield() {
   drawPlayFieldState();
 
   updatePiecePosition();
-
+  drawShadow();
   currentPiece.drawSelf();
+
   if (DEBUG_ROTATION) {
     currentPiece.drawPieceCenter(); // for debugging, remove eventually
   }
@@ -175,7 +176,7 @@ function drawNextQueue() {
 }
 
 function drawShadow() {
-  // TODO
+  currentPiece.drawShadow();
 }
 
 /**
@@ -251,7 +252,6 @@ function draw() {
   drawPlayfield();
   drawHoldArea();
   drawNextQueue();
-  drawShadow();
 }
 
 function triggerGameOver() {
@@ -359,7 +359,6 @@ function keyDownHandler(e) {
       holdPiece = currentPiece;
       updateQueue();
       drawNextQueue();
-      //currentPiece = generateRandomPiece(); //must change for hold bar
     }
     holdPiece.moveToHoldGrid();
     holdPiece.drawSelf(); //need to show something

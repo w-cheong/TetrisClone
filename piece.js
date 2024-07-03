@@ -256,13 +256,21 @@ export class Piece {
     this.centerY++;
   }
 
-  // shadowToGrid() {
-  //   while (!(this.checkForCollision())) {
-  //     this.centerY--;
-  //   }
-  //   this.centerY++;
-  //   this.color = "DimGray"
-  // }
+  getShadowPiece(){
+    return this.clone();
+  }
+
+  drawShadow() {
+    // create a copy of itself, move the copy down until collision, move up, draw in gray
+    let shadowPiece = this.clone();
+
+    // call .moveDown() until it fails
+    while(shadowPiece.moveDown()){}
+
+    shadowPiece.drawSelf();
+
+  }
+
 
   /**
    * @returns true if collision in current position
@@ -344,8 +352,8 @@ export class Piece {
 
 
 export class LPiece extends Piece {
-  constructor(grid, centerX = 6, centerY = 21, orientation = "north") {
-    super(grid, centerX, centerY, orientation, 'orange');
+  constructor(grid, centerX = 6, centerY = 21, orientation = "north", color='orange') {
+    super(grid, centerX, centerY, orientation, color);
     /*
           .
       .[.].
@@ -373,7 +381,9 @@ export class LPiece extends Piece {
   }
 
   clone() {
-    return new LPiece()
+    let shadow = new LPiece(this.grid, this.centerX, this.centerY, this.orientation);
+    shadow.color = 'gray';
+    return shadow;
   }
 }
 
@@ -393,6 +403,12 @@ export class JPiece extends Piece {
     this.kickTable = Piece.kickTable3Piece;
   }
 
+  clone() {
+    let shadow = new JPiece(this.grid, this.centerX, this.centerY, this.orientation);
+    shadow.color = 'gray';
+    return shadow;
+  }
+
 }
 
 export class TPiece extends Piece {
@@ -409,6 +425,12 @@ export class TPiece extends Piece {
       "west": [[-1, 0], [0, 1], [0, 0], [0, -1]],
     }
     this.kickTable = Piece.kickTable3Piece;
+  }
+
+  clone() {
+    let shadow = new TPiece(this.grid, this.centerX, this.centerY, this.orientation);
+    shadow.color = 'gray';
+    return shadow;
   }
 }
 
@@ -428,6 +450,12 @@ export class OPiece extends Piece {
     this.kickTable = Piece.kickTable3Piece;
   }
 
+  clone() {
+    let shadow = new OPiece(this.grid, this.centerX, this.centerY, this.orientation);
+    shadow.color = 'gray';
+    return shadow;
+  }
+
 }
 
 export class IPiece extends Piece {
@@ -444,6 +472,12 @@ export class IPiece extends Piece {
     }
 
     this.kickTable = Piece.kickTable4Piece;
+  }
+
+  clone() {
+    let shadow = new IPiece(this.grid, this.centerX, this.centerY, this.orientation);
+    shadow.color = 'gray';
+    return shadow;
   }
 }
 
@@ -463,6 +497,12 @@ export class SPiece extends Piece {
     this.kickTable = Piece.kickTable3Piece;
   }
 
+  clone() {
+    let shadow = new SPiece(this.grid, this.centerX, this.centerY, this.orientation);
+    shadow.color = 'gray';
+    return shadow;
+  }
+
 }
 
 
@@ -480,5 +520,11 @@ export class ZPiece extends Piece {
       "west": [[0, 0], [0, 1], [-1, 0], [-1, -1]],
     }
     this.kickTable = Piece.kickTable3Piece;
+  }
+
+  clone() {
+    let shadow = new ZPiece(this.grid, this.centerX, this.centerY, this.orientation);
+    shadow.color = 'gray';
+    return shadow;
   }
 }
