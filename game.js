@@ -45,12 +45,12 @@ let tickToRepeatHeldKey = -1;
 /**
  * How long to wait before starting to repeat movement
  */
-const INITIAL_HELD_KEY_CHECK_DELAY = 14;
+const INITIAL_HELD_KEY_CHECK_DELAY = 8;
 
 /**
  * How many ticks to wait between key replays
  */
-const HELD_KEY_DELAY = 4;
+const HELD_KEY_DELAY = 2;
 
 /**
  * Used to auto-drop piece
@@ -282,12 +282,12 @@ function generateRandomPiece() {
 function draw() {
   if (paused || gameOver) return;
 
+  gameTick++;
+
   if (GRAVITY) {
-    gameTick++;
     // console.log(gameTick);
 
     // logic to handle automatic movedown after timer expires & piece lock
-    gameTick++;
 
     ticksElapsed++;
     if (ticksElapsed >= ticksUntilMoveDown) {
