@@ -141,7 +141,6 @@ function populateQueue() {
  *
  * Called by redraw
  */
-// function updatePiecePosition() {
 function handleHeldMovement() {
   // up and down use older update approach (on refresh)
 
@@ -181,7 +180,6 @@ function drawPlayfield() {
   drawPlayFieldState();
 
   drawShadow();
-  // updatePiecePosition();
 
   currentPiece.drawSelf();
 
@@ -227,6 +225,14 @@ function drawShadow() {
 }
 
 /**
+ * @param {number} level
+ * @return {number} ticks before auto-move-down
+ */
+function autoMoveDownDelay(level) {
+  return INITIAL_TICKS_TILL_MOVE_DOWN - 2 * level;
+}
+
+/**
  * Update queue when piece moves out of queue.
  */
 function updateQueue() {
@@ -254,7 +260,7 @@ function lineClear() {
     }
   }
   totalLinesCleared += counter;
-  ticksUntilMoveDown = INITIAL_TICKS_TILL_MOVE_DOWN - Math.round(3 * totalLinesCleared / 5)
+  ticksUntilMoveDown = autoMoveDownDelay(Math.floor(totalLinesCleared/5));
 }
 
 /**
