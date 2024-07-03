@@ -290,7 +290,7 @@ export class Piece {
   }
 
   /**
-   * @returns boolean
+   * @returns boolean True if piece is on surface
    */
   checkIsOnSurface(){
     this.centerY--;

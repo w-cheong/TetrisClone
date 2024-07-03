@@ -291,6 +291,7 @@ function generateRandomPiece() {
 const LOCK_DELAY = 20;
 
 let tickToLockPiece = -1;
+let minCenterY = -1;
 
 
 function draw() {
@@ -308,25 +309,45 @@ function draw() {
     // console.log("tickToLockPiece: " + tickToLockPiece)
 
     if (tickToLockPiece !== -1 && gameTick >= tickToLockPiece) {
+      // piece locking
+      // console.log('in here')
       //try movedown again
-      let moveDownSucceeded = currentPiece.moveDown();
-      if (!moveDownSucceeded) {
+      // let moveDownSucceeded = currentPiece.moveDown();
+      if (currentPiece.checkIsOnSurface()) {
         // console.log('locking')
         lockPieceIntoGridAndContinue();
         tickToLockPiece = -1;
+        minCenterY = -1;
       } else {
         // move down succeeded, reset lock down timer
+        // ticksElapsed = 0;
         tickToLockPiece = gameTick + LOCK_DELAY;
       }
 
     }
 
     if (ticksElapsed >= ticksUntilMoveDown) {
+      // gravity
+      // timer expired for moving down
+      // console.log('also here')
       ticksElapsed = 0;
       let moveDownSucceeded = currentPiece.moveDown();
-      if (!moveDownSucceeded && tickToLockPiece === -1) {
+
+      if (!moveDownSucceeded) {
         // piece has hit a surface, should begin countdown for locking piece down
-        tickToLockPiece = gameTick + LOCK_DELAY;
+
+        if (minCenterY === -1) { // hasn't hit surface previously
+          // console.log('has not hit surface previously')
+          minCenterY = currentPiece.centerY;
+          tickToLockPiece = gameTick + LOCK_DELAY; // start countdown for locking piece
+        } else { // hit surface after having previously hit surface
+          if (minCenterY > currentPiece.centerY) { // the surface is lower / different
+            // console.log('has hit lower surface')
+            minCenterY = currentPiece.centerY;
+            tickToLockPiece = gameTick + LOCK_DELAY; // reset countdown for locking piece
+          }
+        }
+
 
       }
     }
