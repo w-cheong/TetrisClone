@@ -1,4 +1,5 @@
 # TetrisClone
+This project is an attempt at replicating the play of modern versions of Tetris.
 
 ## Game Logic
 The most integral part of the project. Proper game functionality.
@@ -37,30 +38,39 @@ Gets mapped to game grid's coordinate system.
 
 Then every refresh tick, redraw playfield using the `drawGridPiece()` function.
 
-## Task List
+## Primary Task List
+The main tasks to achieve for this project for functional gameplay. 
+Project will be considered in a finished state when all these tasks are completed.
 * [X] Draw all pieces in their default orientation (north)
 * [X] Add moving of pieces (with collision avoidance)
-  * [X] Listen to keybinds
+* [X] Listen to keybinds
 * [X] Draw all pieces in their other orientations
 * [X] Add rotation of pieces (with kick table)
-  * [ ] Check accuracy of rotation of pieces (with kick table)
 * [X] Add gravity of pieces
 * [X] Add game over condition (Pieces stop dropping after block out)
-  * [ ] Additional game over condition - lock out (entire piece drops above playzone)
 * [X] Add hold function
 * [X] Add next queue pieces
-* [ ] Textbar for controls (cosmetic)
-  * [ ] Customizable keyboard binding???
-  * [ ] Audio (Sound effects, background music)
-  * [ ] Text appearing on screen for singles, doubles, triples, and tetrises cleared
-  * [ ] Text for combos (# of drops in a row that cause line clears)
-  * [ ] Scoring (+ high scores list???)
 * [X] Increasing gravity speed over time
 * [X] Pieces stop being controlled when landing without hard drop
-* [ ] Add shadow piece (should show where piece lands after hard drop)
-  * [ ] Add autoplay
+* [X] Add shadow piece (should show where piece lands after hard drop)
 * [X] Pause function (automatically when switching windows and/or pause button)
 
+
+## Secondary Task List
+Mainly cosmetic features for improved user experience, not necessary for playability
+These features may be implemented at any future point in any order
+* [X] Restart game without restarting tab
+* [ ] Visual for paused screen
+* [ ] Proper randomization for next queue pieces (7-bag system)
+* [ ] Add autoplay
+* [ ] Check accuracy of rotation of pieces (with kick table)
+* [ ] Additional game over condition - lock out (entire piece drops above playzone)
+* [ ] Textbar for controls 
+* [ ] Customizable keyboard binding
+* [ ] Audio features
+* [ ] Text appearing on screen for singles, doubles, triples, and tetrises cleared
+* [ ] Text for combos (# of drops in a row that cause line clears)
+* [ ] Scoring 
 
 ## References
 
