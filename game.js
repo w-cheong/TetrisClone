@@ -3,13 +3,10 @@ import * as pieces from "./piece.js";
 import { Grid } from "./grid.js";
 
 const playfieldCanvas = document.getElementById("playfield");
-const playfieldCTX = playfieldCanvas.getContext("2d");
 
 const holdAreaCanvas = document.getElementById('holdArea');
-const holdAreaCTX = holdAreaCanvas.getContext("2d");
 
 const nextQueueCanvas = document.getElementById('nextQueue');
-const nextQueueCTX = nextQueueCanvas.getContext("2d");
 
 const gameOverDiv = document.getElementById('gameOverDiv');
 const gameOverDivHeight = gameOverDiv.offsetHeight;
@@ -22,7 +19,7 @@ gameOverDiv.style.top = `${gameContainerHeight / 2 - gameOverDivHeight / 2}px`
 
 let rightPressed = false;
 let leftPressed = false;
-let upPressed = false;
+//let upPressed = false;
 let downPressed = false;
 
 // let startingDelay = 300;
@@ -119,7 +116,7 @@ currentPiece.drawSelf();
 
 /**
  * Queue containing the next few pieces
- * @param {Piece[]} queue
+ * @param {pieces[]} queue
  */
 let queue = [];
 populateQueue();
@@ -144,12 +141,12 @@ function populateQueue() {
 function handleHeldMovement() {
   // up and down use older update approach (on refresh)
 
-  if (upPressed) {
-    currentPiece.moveUp();
-    console.log('Refiring Up')
-  }
+  // if (upPressed) {
+  //   currentPiece.moveUp();
+  //   console.log('Refiring Up')
+  // }
   if (downPressed) {
-    currentPiece.moveDown();
+    currentPiece.softDrop();
     console.log('Refiring Down')
   }
 
@@ -312,7 +309,7 @@ function draw() {
       // piece locking
       // console.log('in here')
       //try movedown again
-      // let moveDownSucceeded = currentPiece.moveDown();
+      // let moveDownSucceeded = currentPiece.softDrop();
       if (currentPiece.checkIsOnSurface()) {
         // console.log('locking')
         lockPieceIntoGridAndContinue();
@@ -331,7 +328,7 @@ function draw() {
       // timer expired for moving down
       // console.log('also here')
       ticksElapsed = 0;
-      let moveDownSucceeded = currentPiece.moveDown();
+      let moveDownSucceeded = currentPiece.softDrop();
 
       if (!moveDownSucceeded) {
         // piece has hit a surface, should begin countdown for locking piece down
@@ -469,13 +466,13 @@ function keyDownHandler(e) {
     handleMovementDelay("right");
   } else if (e.key === "Left" || e.key === "ArrowLeft") {
     handleMovementDelay("left");
-  } else if (e.key === "Up" || e.key === "ArrowUp") {
+  } /** else if (e.key === "Up" || e.key === "ArrowUp") {
     upPressed = true;
     currentPiece.moveUp();
     // handleMovementDelay('up');
-  } else if (e.key === "Down" || e.key === "ArrowDown") {
+  } */ else if (e.key === "Down" || e.key === "ArrowDown") {
     downPressed = true;
-    currentPiece.moveDown();
+    currentPiece.softDrop();
     // handleMovementDelay('down');
   } else if (e.key === 'd') {
     currentPiece.rotateCCW();

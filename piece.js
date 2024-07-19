@@ -229,17 +229,20 @@ export class Piece {
       this.centerX--;
     }
   }
-  moveUp() {
-    this.centerY++;
-    if(this.checkForCollision()){
-      this.centerY--;
-    }
-  }
+  /**
+   * for testing only
+   */
+  // moveUp() {
+  //   this.centerY++;
+  //   if(this.checkForCollision()){
+  //     this.centerY--;
+  //   }
+  // }
 
   /**
    * @return boolean whether succeeded
    */
-  moveDown() {
+  softDrop() {
     this.centerY--;
     if(this.checkForCollision()){
       this.centerY++;
@@ -248,7 +251,6 @@ export class Piece {
     return true
   }
 
-  softDrop() { return null; }
   hardDrop() {
     while (!(this.checkForCollision())) {
       this.centerY--;
@@ -265,7 +267,7 @@ export class Piece {
     let shadowPiece = this.clone();
 
     // call .moveDown() until it fails
-    while(shadowPiece.moveDown()){}
+    while(shadowPiece.softDrop()){}
 
     shadowPiece.drawSelf();
 
