@@ -13,10 +13,11 @@ const gameOverDivHeight = gameOverDiv.offsetHeight;
 const gameContainer = document.getElementById('game');
 const gameContainerHeight = gameContainer.offsetHeight;
 
+const pausedGameDiv = document.getElementById('pausedGame');
 const resetBtn = document.getElementById('resetBtn');
 
 gameOverDiv.style.top = `${gameContainerHeight / 2 - gameOverDivHeight / 2}px`
-
+pausedGameDiv.style.top = `${gameContainerHeight / 2 - gameOverDivHeight / 2}px`
 let rightPressed = false;
 let leftPressed = false;
 //let upPressed = false;
@@ -169,9 +170,9 @@ function handleHeldMovement() {
 
 
 function drawPlayfield() {
-  if (paused)  //  shouldn't update if paused
+  if (paused) {  //  shouldn't update if paused
     return;
-
+  }
   playfieldGrid.draw();
 
   drawPlayFieldState();
@@ -413,6 +414,7 @@ function resetGame(){
   populateQueue();
 
   gameOverDiv.style.visibility = "hidden";
+  pausedGameDiv.style.visibility = "hidden";
 
   gameOver = false;
   paused = false;
@@ -452,14 +454,18 @@ function keyDownHandler(e) {
     if (e.key === 'r'){
       resetGame();
     }
-    return
+    return;
   }
+
   if (e.key === 'p') {
     paused = !paused;
   }
 
-  if (paused) {
+  if (paused) { //show game is paused, do not allow user input except unpause
+    pausedGameDiv.style.visibility = "visible";
     return;
+  } else {
+    pausedGameDiv.style.visibility = "hidden";
   }
 
   if (e.key === "Right" || e.key === "ArrowRight") {

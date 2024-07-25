@@ -59,13 +59,14 @@ Project will be considered in a finished state when all these tasks are complete
 ## Secondary Task List
 Mainly cosmetic features for improved user experience, not necessary for playability
 These features may be implemented at any future point in any order
+Some tasks may be removed if deemed unneeded for users
 * [X] Restart game without restarting tab
-* [ ] Visual for paused screen
+* [X] Text marking hold and next queues
+* [X] Visual for paused screen
 * [ ] Proper randomization for next queue pieces (7-bag system)
 * [ ] Add autoplay
-* [ ] Check accuracy of rotation of pieces (with kick table)
+* [ ] Start Screen designed
 * [ ] Additional game over condition - lock out (entire piece drops above playzone)
-* [ ] Textbar for controls 
 * [ ] Customizable keyboard binding
 * [ ] Audio features
 * [ ] Text appearing on screen for singles, doubles, triples, and tetrises cleared
@@ -73,7 +74,7 @@ These features may be implemented at any future point in any order
 * [ ] Scoring 
 
 ## References
-
+Sources used as basis for how the game should look and play. 
 * https://ia804609.us.archive.org/27/items/2009-tetris-variant-concepts_202201/2009%20Tetris%20Design%20Guideline.pdf
 * https://tetris.wiki/Super_Rotation_System
 * https://tetris.fandom.com/wiki/SRS

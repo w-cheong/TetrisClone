@@ -10,11 +10,17 @@
 <body>
 
   <div id="game" class="grid">
+    <div id="pausedGame">
+      <b>Paused</b>
+    </div> 
     <div id="gameOverDiv">
       <b>Game Over</b>
       <button type="button" id="resetBtn">Retry?</button>
     </div>
     <div id="leftArea">
+      <div id = holdHeader> 
+        <h2>HOLD</h2>
+      </div>
       <canvas id="holdArea" width="120" height="120"></canvas>
     </div>
     <div id="centerArea">
@@ -22,6 +28,9 @@
       <canvas id="playfield" width="300" height="600"></canvas>
     </div>
     <div id="rightArea">
+      <div id = nextHeader> 
+        <h2>NEXT</h2>
+      </div>
       <!-- next 6 tetriminos should be shown. 2*6+5 = 17 cells total -->
       <canvas id="nextQueue" width="120" height="510"></canvas>
     </div>
