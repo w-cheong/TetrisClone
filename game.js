@@ -16,6 +16,12 @@ const gameContainerHeight = gameContainer.offsetHeight;
 const pausedGameDiv = document.getElementById('pausedGame');
 const resetBtn = document.getElementById('resetBtn');
 
+const controlPanel = document.getElementById('control-panel');
+controlPanel.style.left = '16rem';
+controlPanel.style.position = 'absolute';
+controlPanel.style.top = '50%';
+controlPanel.style.transform = 'translateY(-50%)';
+
 gameOverDiv.style.top = `${gameContainerHeight / 2 - gameOverDivHeight / 2}px`
 pausedGameDiv.style.top = `${gameContainerHeight / 2 - gameOverDivHeight / 2}px`
 let rightPressed = false;

@@ -3,12 +3,11 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Tetris</title>
+  <title>TetrisClone</title>
   <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 </head>
 
 <body>
-
   <div id="game" class="grid">
     <div id="pausedGame">
       <b>Paused</b>
@@ -35,8 +34,21 @@
       <canvas id="nextQueue" width="120" height="510"></canvas>
     </div>
   </div>
-
+  <div id="control-panel">
+    <div id="controls">
+      <a><h1>Controls</h1></a>
+      <a><h2>Left Arrow: Move Left</h2></a>
+      <a><h2>Right Arrow: Move Right</h2></a>
+      <a><h2>Down Arrow: Move Down</h2></a>
+      <a><h2>Space: Hard Drop</h2></a>
+      <a><h2>Shift: Hold</h2></a>
+      <a><h2>P: Pause</h2></a>
+      <a><h2>R: Reset after Game Over</h2></a>
+      <a><h2>F: Rotate Clockwise</h2></a>
+      <a><h2>D: Rotate Counter-Clockwise</h2></a>
+    </div>
   <script src="./game.js" type="module"></script>
+  
 </body>
 
 </html>

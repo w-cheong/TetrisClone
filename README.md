@@ -57,12 +57,11 @@ Project will be considered in a finished state when all these tasks are complete
 
 
 ## Secondary Task List
-Mainly cosmetic features for improved user experience, not necessary for playability
-These features may be implemented at any future point in any order
-Some tasks may be removed if deemed unneeded for users
+These are cosmetic features for improved user experience which are not necessary for playability. These features may be implemented at any future point in any order.
 * [X] Restart game without restarting tab
 * [X] Text marking hold and next queues
 * [X] Visual for paused screen
+* [X] Visual for gameplay controls 
 * [ ] Proper randomization for next queue pieces (7-bag system)
 * [ ] Add autoplay
 * [ ] Start Screen designed
